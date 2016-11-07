@@ -1,11 +1,11 @@
 #import slikland.utils.Prototypes
 #import slikland.event.EventDispatcher
 
-# 
+#
 # Helper for adding BaseDOM into any DOM element
-# 
+#
 # TODO: FIX IE8+
-# 
+#
 Node::__appendChild__ = Node::appendChild
 Node::appendChild = (node) ->
 	el = node
@@ -19,8 +19,27 @@ Node::removeChild = (node) ->
 	el = node
 	if node instanceof BaseDOM
 		el = node.element
-		node.parent = @
 	Node::__removeChild__.call(@, el)
+	if node instanceof BaseDOM
+		node.parent = null
+
+Node::__replaceChild__ = Node::replaceChild
+Node::replaceChild = (newNode, oldNode) ->
+	el1 = newNode
+	el2 = oldNode
+
+	if newNode instanceof BaseDOM
+		el1 = newNode.element
+	if oldNode instanceof BaseDOM
+		el2 = oldNode.element
+
+	Node::__replaceChild__.call(@, el1, el2)
+
+	if newNode instanceof BaseDOM
+		newNode.parent = @
+	if oldNode instanceof BaseDOM
+		oldNode.parent = null
+
 Element::matches = Element::matches || Element::webkitMatchesSelector || Element::mozMatchesSelector || Element::msMatchesSelector || Element::oMatchesSelector
 Node::findParents = (query) ->
 	if @parentNode?
@@ -30,7 +49,7 @@ Node::findParents = (query) ->
 			return @parentNode.findParents(query)
 	return null
 
-# 
+#
 # TODO: FIX IE8+
 # Node.get({instance: ()-> return @__instance__})
 
@@ -41,14 +60,14 @@ Base DOM manipulation class
 ###
 
 class BaseDOM extends EventDispatcher
-	# 
+	#
 	# Deprecated params: constructor:(element = 'div', className = null, namespace = null)->
-	# 
+	#
 	constructor:(p_options...)->
 		super
-		# 
+		#
 		# Default params:
-		# 
+		#
 		element = 'div'
 		className = null
 		namespace = null
@@ -109,7 +128,7 @@ class BaseDOM extends EventDispatcher
 		return @getBounds().width
 	@get height:()->
 		return @getBounds().height
-	
+
 	@get left:()->
 		return @getBounds().left
 	@get top:()->
@@ -127,10 +146,13 @@ class BaseDOM extends EventDispatcher
 	@get parent: ()->
 		return @_parent
 
-	@set parent: (value)->
-		if !(value instanceof BaseDOM) && !(value instanceof Node)
-			throw new Error('Parent instance is not either Node or BaseDOM')
-		return @_parent = value
+	@set parent: (value = null)->
+		if value?
+			if !(value instanceof BaseDOM) && !(value instanceof Node)
+				throw new Error('Parent instance is not either Node or BaseDOM')
+			@_parent = value
+		else
+			@_parent = null
 
 	##--------------------------------------
 	##	CSS Class Name
@@ -179,6 +201,20 @@ class BaseDOM extends EventDispatcher
 		if child instanceof BaseDOM
 			child.parent = @
 		return child
+
+	replaceChild:(replaceElement, oldElement)->
+		el1 = replaceElement
+		el2 = oldElement
+		if replaceElement instanceof BaseDOM
+			el1 = replaceElement.element
+		if oldElement instanceof BaseDOM
+			el2 = oldElement.element
+		@element.replaceChild el1, el2
+		if replaceElement instanceof BaseDOM
+			replaceElement.parent = @
+		if oldElement instanceof BaseDOM
+			oldElement.parent = null
+		return replaceElement
 
 	remove:()->
 		@parent?.removeChild?(@)
@@ -243,24 +279,30 @@ class BaseDOM extends EventDispatcher
 	##	@example:
 	##	attr({id: 1, name: 2})
 	##--------------------------------------
-	attr:(name, value = 'nonenonenone', namespace = false)->
+	attr:(name, value = 'nonenonenone', namespace = null)->
 		if typeof(name) == 'string'
 			return @_attr(name, value, namespace)
 		else if typeof(name) == 'object'
 			for k, v of name
 				@_attr(k, v, namespace)
 
-	_attr:(name, value = 'nonenonenone', namespace = false)->
-		if namespace is false
+	_attr:(name, value = 'nonenonenone', namespace = null)->
+		if namespace is true
 			namespace = @namespace
 
 		# Default valus is 'nonenonenone' because of when setting null or false
 		if value != 'nonenonenone'
-			if namespace
-				@element.setAttributeNS(namespace, name, value)
+			if @namespace?
+				if value?
+					@element.setAttributeNS(namespace, name, value)
+				else
+					@element.removeAttributeNS(namespace, name, value)
 			else
-				@element.setAttribute(name, value)
-		if namespace
+				if value?
+					@element.setAttribute(name, value)
+				else
+					@element.removeAttribute(name, value)
+		if @namespace?
 			return @element.getAttributeNS(namespace, name)
 		else
 			return @element.getAttribute(name)
@@ -333,6 +375,7 @@ class BaseDOM extends EventDispatcher
 				@removeClass(className[i])
 			else
 				@addClass(className[i])
+
 	hasClass:(className)->
 		if typeof(className) is 'string'
 			className = className.replace(/\s+/ig, ' ').split(' ')
@@ -347,7 +390,6 @@ class BaseDOM extends EventDispatcher
 		while i-- > 0
 			hasClass &= (classNames.indexOf(className[i]) >= 0)
 		return hasClass
-		
 
 	##--------------------------------------
 	##	Get elements bounds as rectangle.

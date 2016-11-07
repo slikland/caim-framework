@@ -1,0 +1,19 @@
+{
+	"meta":
+	{
+		"title": "UI Components",
+		"description":"UI Components",
+		"social":{
+			"facebook":{
+				"type":"website",
+				"title": "title facebook here",
+				"description":"description facebook here"
+			},
+			"twitter":{
+				"type":"summary",
+				"title": "title twitter here",
+				"description":"description twitter here"
+			}
+		}
+	}
+}

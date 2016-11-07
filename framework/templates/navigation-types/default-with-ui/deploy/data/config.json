@@ -1,0 +1,54 @@
+{
+	"paths":
+	{
+		"cdn":"",
+		"base":"",
+		"images":"{base}media/images/"
+	},
+	"navigation":{
+		"forceHashBang":false,
+		"startBefore":true,
+		"autoStart":true,
+		"instantiateViews":true,
+		"defaultView":"home"
+	},
+	"views":[
+		{
+			"id":"home",
+			"class":"ui-components",
+			"route":"/",
+			"content":"{base}data/home.json",
+			"cache":true,
+			"destroyable":true,
+			"loadContent":true
+		}
+	],
+	"required":
+	{
+		"preloader":
+		[
+			{
+				"id": "preloader-css",
+				"src": "{base}css/preloader.css"
+			}
+		],
+		"core":
+		[
+			{
+				"id":"vendors",
+				"src":"{base}js/vendors.js"
+			}
+		],
+		"main":
+		[
+			{
+				"id": "main-css",
+				"src": "{base}css/main.css"
+			},
+			{
+				"id": "main-js",
+				"src": "{base}js/main.js"
+			}
+		]
+	}
+}
