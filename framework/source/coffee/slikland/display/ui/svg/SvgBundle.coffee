@@ -59,16 +59,20 @@ class Svg.Asset extends BaseDOM
 			target = @findParents('svg')?.__instance__
 			@_root = target if target instanceof Svg
 
+	@get parent: ()->
+		return @_parent
+
 	@set parent: (value)->
-		_lastParent = @_parent
 		if value?
 			if !(value instanceof BaseDOM) && !(value instanceof Node)
 				throw new Error('Parent instance is not either Node or BaseDOM')
+			_lastParent = @_parent
 			@_parent = value
 			@_added() if !_lastParent?
-		else if !@isAttached
+		else
 			@_parent = null
-			@_removed() if _lastParent isnt null
+			@_removed() if _lastParent?
+			_lastParent = null
 
 	use:(p_options = {})->
 		if !@_options.attrs?.id?
@@ -102,8 +106,6 @@ class Svg.Asset extends BaseDOM
 
 			if !@_options.attrs?.id?
 				@option('attrs', {id:StringUtils.random()})
-
-			console.log 'id', p_filterOptions
 
 			if !!@_currentFilter
 				if p_filters?.length > 0
@@ -187,7 +189,7 @@ class Svg.Asset extends BaseDOM
 
 	_immediateInvalidate:(property = null)=>
 		@_invalidate(property)
-		@trigger(@constructor.INVALIDATE_OPTIONS, {property:property, options:@_options})
+		@trigger(Svg.INVALIDATE_OPTIONS, {property:property, options:@_options})
 
 	_invalidate:()->
 		if @_options.attrs?
@@ -376,9 +378,8 @@ class Svg.Path extends Svg.Asset
 				"m #{-radius}, 0" +
 				"a #{radius},#{radius} 0 1,0 #{(radius * 2)},0" +
 				"a #{radius},#{radius} 0 1,0 #{-(radius * 2)},0"
-		options.attrs = {
-			d: d
-		}
+		options.attrs ?= {}
+		options.attrs.d = d
 		@_path = new Svg.Path options
 		return @_path
 
@@ -394,9 +395,8 @@ class Svg.Path extends Svg.Asset
 				"v #{(2 * radius - height)}" +
 				"a #{radius},#{radius} 0 0 1 #{radius},#{-radius}" +
 				"z"
-		options.attrs = {
-			d: d
-		}
+		options.attrs ?= {}
+		options.attrs.d = d
 		@_path = new Svg.Path options
 		return @_path
 
@@ -468,7 +468,7 @@ class Svg.Text extends Svg.Asset
 		if typeof @_options?.text is 'string' and @_options?.text isnt @element.textContent
 			@element.textContent = @_options.text
 		else if Array.isArray(@_options.text)
-			@element.innerHTML = ''
+			@removeAll(true)
 			for value, index in @_options.text
 				if typeof value is 'string'
 					@appendSpan ObjectUtils.merge({text:value}, @_options.tspan)

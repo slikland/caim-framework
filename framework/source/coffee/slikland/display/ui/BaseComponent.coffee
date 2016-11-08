@@ -57,11 +57,13 @@ class BaseComponent extends BaseDOM
 		if value?
 			if !(value instanceof BaseDOM) && !(value instanceof Node)
 				throw new Error('Parent instance is not either Node or BaseDOM')
+			_lastParent = @_parent
 			@_parent = value
-			@_added()
+			@_added() if !_lastParent?
 		else if @isAttached
 			@_parent = null
-			@_removed()
+			@_removed() if _lastParent?
+			_lastParent = null
 
 	option:(p_name, p_value = null)->
 		if typeof p_name is 'string'

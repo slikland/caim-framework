@@ -11,8 +11,9 @@ Node::appendChild = (node) ->
 	el = node
 	if node instanceof BaseDOM
 		el = node.element
-		node.parent = @
 	Node::__appendChild__.call(@, el)
+	if node instanceof BaseDOM
+		node.parent = @
 
 Node::__removeChild__ = Node::removeChild
 Node::removeChild = (node) ->
@@ -219,10 +220,15 @@ class BaseDOM extends EventDispatcher
 	remove:()->
 		@parent?.removeChild?(@)
 
-	removeChild:(child)->
+	removeChild:(child, destroy = false)->
 		el = child
 		if child instanceof BaseDOM
-			el = child.element
+			if !!destroy
+				child.removeAll(true)
+				child.destroy()
+				return child
+			else
+				el = child.element
 		try
 			return @element.removeChild(el)
 
@@ -230,11 +236,12 @@ class BaseDOM extends EventDispatcher
 		if index < @childNodes.length
 			return @removeChild(@childNodes[i])
 
-	removeAll:()->
+	removeAll:(destroy = false)->
 		childs = @childNodes
 		i = childs.length
 		while i-- > 0
-			@removeChild(childs[i])
+			domInstance = childs[i].__instance__
+			@removeChild(domInstance || childs[i], !!domInstance)
 
 	##--------------------------------------
 	##	Check if the instance matches a query selector
@@ -324,6 +331,23 @@ class BaseDOM extends EventDispatcher
 		else if typeof(name) == 'object'
 			for k, v of name
 				@_css(k, v)
+
+	##--------------------------------------
+	##	Set / Get element ComputedStyle
+	##	Accepts object:
+	##	@example:
+	##	style('minHeight')
+	##--------------------------------------
+	style:(styleProp, el = @element)->
+		el = el.element if el instanceof BaseDOM
+		if window.getComputedStyle?
+			return window.getComputedStyle(el)[styleProp]
+		else if el.currentStyle
+			return el.currentStyle[styleProp]
+		else if document.defaultView and document.defaultView.getComputedStyle
+			return document.defaultView.getComputedStyle(el, null)[styleProp]
+		else
+			return @css(styleProp)
 
 	##--------------------------------------
 	##	CSS Class name manipulation

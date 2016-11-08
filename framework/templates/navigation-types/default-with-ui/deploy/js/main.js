@@ -1666,6 +1666,7 @@ BaseComponent = (function(_super) {
   });
   BaseComponent.set({
     parent: function(value) {
+      var _lastParent;
       if (value == null) {
         value = null;
       }
@@ -1673,11 +1674,17 @@ BaseComponent = (function(_super) {
         if (!(value instanceof BaseDOM) && !(value instanceof Node)) {
           throw new Error('Parent instance is not either Node or BaseDOM');
         }
+        _lastParent = this._parent;
         this._parent = value;
-        return this._added();
+        if (_lastParent == null) {
+          return this._added();
+        }
       } else if (this.isAttached) {
         this._parent = null;
-        return this._removed();
+        if (_lastParent != null) {
+          this._removed();
+        }
+        return _lastParent = null;
       }
     }
   });
@@ -2016,9 +2023,18 @@ Svg = (function(_super) {
     return this._invalidateFilters();
   };
   Svg.prototype.destroy = function() {
+    var filter, _i, _len, _ref;
     if (typeof app !== "undefined" && app !== null) {
       app.navigation.off(Navigation.CHANGE_ROUTE, this._didChangeRoute);
     }
+    this._defs.removeAll(true);
+    this._defs.destroy();
+    _ref = this._filtersStack;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      filter = _ref[_i];
+      filter.removeAll(true);
+    }
+    this.removeAll(true);
     return Svg.__super__.destroy.apply(this, arguments);
   };
   Svg.prototype._invalidate = function() {
@@ -2046,8 +2062,7 @@ Svg = (function(_super) {
     if (event == null) {
       event = null;
     }
-    app.detections.name;
-    if (navigator.userAgent.toLowerCase().indexOf('Internet Explorer') === -1) {
+    if (app.detections.name.toLowerCase().indexOf('Internet Explorer') === -1) {
       _searchString = '';
       _ref = this.constructor.SVG_URL_ATTRS;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -2186,23 +2201,29 @@ Svg.Asset = (function(_super) {
       }
     }
   });
+  Asset.get({
+    parent: function() {
+      return this._parent;
+    }
+  });
   Asset.set({
     parent: function(value) {
       var _lastParent;
-      _lastParent = this._parent;
       if (value != null) {
         if (!(value instanceof BaseDOM) && !(value instanceof Node)) {
           throw new Error('Parent instance is not either Node or BaseDOM');
         }
+        _lastParent = this._parent;
         this._parent = value;
         if (_lastParent == null) {
           return this._added();
         }
-      } else if (!this.isAttached) {
+      } else {
         this._parent = null;
-        if (_lastParent !== null) {
-          return this._removed();
+        if (_lastParent != null) {
+          this._removed();
         }
+        return _lastParent = null;
       }
     }
   });
@@ -2269,7 +2290,6 @@ Svg.Asset = (function(_super) {
           id: StringUtils.random()
         });
       }
-      console.log('id', p_filterOptions);
       if (!!this._currentFilter) {
         if ((p_filters != null ? p_filters.length : void 0) > 0) {
           this._currentFilter.removeAll();
@@ -2396,7 +2416,7 @@ Svg.Asset = (function(_super) {
       property = null;
     }
     this._invalidate(property);
-    return this.trigger(this.constructor.INVALIDATE_OPTIONS, {
+    return this.trigger(Svg.INVALIDATE_OPTIONS, {
       property: property,
       options: this._options
     });
@@ -2655,9 +2675,10 @@ Svg.Path = (function(_super) {
       options = {};
     }
     d = ("M " + cx + " " + cy) + ("m " + (-radius) + ", 0") + ("a " + radius + "," + radius + " 0 1,0 " + (radius * 2) + ",0") + ("a " + radius + "," + radius + " 0 1,0 " + (-(radius * 2)) + ",0");
-    options.attrs = {
-      d: d
-    };
+    if (options.attrs == null) {
+      options.attrs = {};
+    }
+    options.attrs.d = d;
     this._path = new Svg.Path(options);
     return this._path;
   };
@@ -2683,9 +2704,10 @@ Svg.Path = (function(_super) {
     }
     radius = Math.min(radius, height / 2);
     d = ("M " + (x + radius) + "," + y) + ("h " + (width - 2 * radius)) + ("a " + radius + "," + radius + " 0 0 1 " + radius + "," + radius) + ("v " + (height - 2 * radius)) + ("a " + radius + "," + radius + " 0 0 1 " + (-radius) + "," + radius) + ("h " + (2 * radius - width)) + ("a " + radius + "," + radius + " 0 0 1 " + (-radius) + "," + (-radius)) + ("v " + (2 * radius - height)) + ("a " + radius + "," + radius + " 0 0 1 " + radius + "," + (-radius)) + "z";
-    options.attrs = {
-      d: d
-    };
+    if (options.attrs == null) {
+      options.attrs = {};
+    }
+    options.attrs.d = d;
     this._path = new Svg.Path(options);
     return this._path;
   };
@@ -2783,7 +2805,7 @@ Svg.Text = (function(_super) {
     if (typeof ((_ref = this._options) != null ? _ref.text : void 0) === 'string' && ((_ref1 = this._options) != null ? _ref1.text : void 0) !== this.element.textContent) {
       return this.element.textContent = this._options.text;
     } else if (Array.isArray(this._options.text)) {
-      this.element.innerHTML = '';
+      this.removeAll(true);
       _ref2 = this._options.text;
       _results = [];
       for (index = _i = 0, _len = _ref2.length; _i < _len; index = ++_i) {
@@ -4620,7 +4642,7 @@ ImageView = (function(_super) {
           this.trigger(ImageView.START, _file);
           return setTimeout((function(_this) {
             return function() {
-              return _this._invalidateImage(_loaded.cloneNode());
+              return _this._invalidateImage(_loaded.cloneNode(true));
             };
           })(this));
         } else {
@@ -4752,18 +4774,16 @@ ImageView = (function(_super) {
         image.onload = (function(_this) {
           return function() {
             image.onload = null;
-            _this._invalidateImage(image);
-            return _this.trigger(ImageView.LOADED, {
-              item: {
-                tag: image
-              }
-            });
+            return _this._invalidateImage(image);
           };
         })(this);
         return;
       } else {
         setTimeout((function(_this) {
           return function() {
+            if (_this._loading.isAttached) {
+              _this.removeChild(_this._loading);
+            }
             return _this.trigger(ImageView.LOADED, {
               item: {
                 tag: image
@@ -4899,11 +4919,8 @@ ImageView = (function(_super) {
           ease: Quad.easeOut,
           onComplete: (function(_this) {
             return function() {
-              var _image, _ref1;
-              if (_this._loading.isAttached) {
-                _this.removeChild(_this._loading);
-              }
-              _image = (_ref1 = item.tag) != null ? _ref1.cloneNode() : void 0;
+              var _image;
+              _image = item.tag.cloneNode(true);
               return _this._invalidateImage(_image);
             };
           })(this)
@@ -4959,11 +4976,17 @@ UiComponents = (function(_super) {
     return UiComponents.__super__.createStart.apply(this, arguments);
   };
   UiComponents.prototype.create = function(evt) {
-    var sampleImage, _image, _image2, _rect, _testEl, _testEl2, _text;
     if (evt == null) {
       evt = null;
     }
-    sampleImage = "" + app.root + "media/images/fxlogo.png";
+    return UiComponents.__super__.create.apply(this, arguments);
+  };
+  UiComponents.prototype.createComplete = function(evt) {
+    var sampleImage, _image, _image2, _rect, _ref, _testEl, _testEl2, _text;
+    if (evt == null) {
+      evt = null;
+    }
+    sampleImage = this.content.logo;
     _testEl = new BaseDOM({
       className: 'el1'
     });
@@ -4980,6 +5003,7 @@ UiComponents = (function(_super) {
     _image2 = new ImageView({
       src: sampleImage,
       fit: 'cover',
+      position: 'center top',
       style: {
         width: '100px',
         height: '50px'
@@ -4987,23 +5011,36 @@ UiComponents = (function(_super) {
     });
     this.appendChild(_image2);
     this._svg = new Svg({
-      className: 'teste'
+      className: 'teste',
+      attrs: {
+        width: 200,
+        height: 200
+      }
     });
     this.appendChild(this._svg);
     _text = new Svg.Text({
       text: 'novidade',
       attrs: {
+        x: '10',
         y: '1em',
-        'font-family': 'Verdana'
+        'font-family': 'Times New Roman'
       }
     });
-    _text.text = ['agora', ' ', 'v', 'a', 'i', '!'];
+    _text.text = ['agora ', 'v', 'a', 'i', '!'];
     _image = new Svg.Image({
       attrs: {
-        'xlink:href': sampleImage
+        'xlink:href': ((_ref = sampleImage.tag) != null ? _ref.src : void 0) || sampleImage.src,
+        x: '50%'
       }
     });
-    _rect = new Svg.Path.rect(10, 25, 80, 30, 20);
+    _rect = new Svg.Rect({
+      attrs: {
+        x: '50%',
+        y: '0',
+        width: '100',
+        height: '100'
+      }
+    });
     _image.clipPath(_rect);
     this._svg.appendChild(_image);
     this._svg.appendChild(_text);
@@ -5025,7 +5062,7 @@ UiComponents = (function(_super) {
       attrs: {
         result: 'turbulence',
         baseFrequency: '0.05',
-        numOctaves: '1'
+        numOctaves: '2'
       }
     }), new Svg.Filters.DisplacementMap({
       attrs: {
@@ -5036,13 +5073,6 @@ UiComponents = (function(_super) {
         yChannelSelector: 'A'
       }
     }));
-    console.log(this._filterImage);
-    return UiComponents.__super__.create.apply(this, arguments);
-  };
-  UiComponents.prototype.createComplete = function(evt) {
-    if (evt == null) {
-      evt = null;
-    }
     return UiComponents.__super__.createComplete.apply(this, arguments);
   };
   UiComponents.prototype.showStart = function(evt) {

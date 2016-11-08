@@ -143,6 +143,11 @@ class Svg extends BaseComponent
 
 	destroy:()->
 		app?.navigation.off Navigation.CHANGE_ROUTE, @_didChangeRoute
+		@_defs.removeAll(true)
+		@_defs.destroy()
+		for filter in @_filtersStack
+			filter.removeAll(true)
+		@removeAll(true)
 		super
 
 	_invalidate:()->
@@ -160,8 +165,7 @@ class Svg extends BaseComponent
 
 	_didChangeRoute:(event=null)=>
 		# UPDATE SVG-FILTER URLS (FIREFOX AND CHROME:v:53.*) #
-		app.detections.name
-		if navigator.userAgent.toLowerCase().indexOf('Internet Explorer') is -1
+		if app.detections.name.toLowerCase().indexOf('Internet Explorer') is -1
 			_searchString = ''
 			for value in @constructor.SVG_URL_ATTRS
 				params = value.split('|')

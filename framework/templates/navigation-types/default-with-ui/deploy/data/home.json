@@ -15,5 +15,15 @@
 				"description":"description twitter here"
 			}
 		}
+	},
+
+	"image":{
+		"id":"dummy",
+		"src":"{images}dummy.png"
+	},
+
+	"logo":{
+		"id":"fxlogo",
+		"src":"{images}fxlogo.png"
 	}
 }

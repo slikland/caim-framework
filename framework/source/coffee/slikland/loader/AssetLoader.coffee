@@ -35,13 +35,13 @@ class AssetLoader extends EventDispatcher
 		group = @_groups[p_groupId]
 		if !group
 			group = new createjs.LoadQueue(p_xhr)
-			group.installPlugin(createjs.CacheControllerPlugin)
+			# group.installPlugin(createjs.CacheControllerPlugin)
 			group.installPlugin(createjs.MediaPlugin)
 			group.id = p_groupId
 			@_groups[p_groupId] = group
-			group.on(AssetLoader.COMPLETE_FILE, @_fileLoad)
-			group.on(AssetLoader.ERROR, @_onError)
-			group.on(AssetLoader.FILE_ERROR, @_onFileError)
+			group.addEventListener(AssetLoader.COMPLETE_FILE, @_fileLoad)
+			group.addEventListener(AssetLoader.ERROR, @_onError)
+			group.addEventListener(AssetLoader.FILE_ERROR, @_onFileError)
 		group.setMaxConnections(p_concurrent)
 		return group
 
@@ -50,30 +50,30 @@ class AssetLoader extends EventDispatcher
 		return group
 
 	_onError:(e)=>
-		e.currentTarget.off(AssetLoader.ERROR, @_onError)
-		e.currentTarget.off(AssetLoader.COMPLETE_FILE, @_fileLoad)
+		e.currentTarget.removeEventListener(AssetLoader.ERROR, @_onError)
+		e.currentTarget.removeEventListener(AssetLoader.COMPLETE_FILE, @_fileLoad)
 		console.log e
 		throw new Error(e.title).stack
 		false
 
 	_onFileError:(e)=>
-		e.currentTarget.off(AssetLoader.FILE_ERROR, @_onFileError)
-		e.currentTarget.off(AssetLoader.COMPLETE_FILE, @_fileLoad)
+		e.currentTarget.removeEventListener(AssetLoader.FILE_ERROR, @_onFileError)
+		e.currentTarget.removeEventListener(AssetLoader.COMPLETE_FILE, @_fileLoad)
 		console.log e
 		throw new Error(e.title).stack
 		false
 
 	_fileLoad:(e)=>
-		e.currentTarget.off(AssetLoader.COMPLETE_FILE, @_fileLoad)
-		e.currentTarget.off(AssetLoader.ERROR, @_onError)
-		e.currentTarget.off(AssetLoader.FILE_ERROR, @_onFileError)
+		e.currentTarget.removeEventListener(AssetLoader.COMPLETE_FILE, @_fileLoad)
+		e.currentTarget.removeEventListener(AssetLoader.ERROR, @_onError)
+		e.currentTarget.removeEventListener(AssetLoader.FILE_ERROR, @_onFileError)
 		e.item.tag = e.result
 		false
 
 	getItem:(p_id, p_groupId=null)->
 		if p_groupId
 			return @_groups[p_groupId]?.getItem(p_id)
-		
+
 		for k, v of @_groups
 			if i = v.getItem(p_id)
 				return i
@@ -82,7 +82,7 @@ class AssetLoader extends EventDispatcher
 		result = null
 		if p_groupId
 			result = @_groups[p_groupId]?.getResult(p_id)
-		
+
 		for k, v of @_groups
 			if i = v.getResult(p_id)
 				result = i
@@ -96,15 +96,15 @@ class AssetLoader extends EventDispatcher
 				id:''
 				src:''
 			}
-			
+
 			jsRE.lastIndex = 0
 			obj.id = f.id || 'item'
 			obj.src = f.src
-			
-			# 
+
+			#
 			# When it's a video please set 'false' on the xhr param to get progress and load file
 			#
-			
+
 			if mp4RE.test(obj.src)
 				obj['type'] = 'video'
 

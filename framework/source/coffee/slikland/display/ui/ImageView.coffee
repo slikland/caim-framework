@@ -120,7 +120,7 @@ class ImageView extends BaseComponent
 			if _loaded?
 				@trigger ImageView.START, _file
 				setTimeout ()=>
-					@_invalidateImage(_loaded.cloneNode())
+					@_invalidateImage(_loaded.cloneNode(true))
 			else
 				if @_loaderGroup.progress > 0
 					@_loaderGroup.close()
@@ -216,10 +216,10 @@ class ImageView extends BaseComponent
 				image.onload = ()=>
 					image.onload = null
 					@_invalidateImage(image)
-					@trigger ImageView.LOADED, {item:{tag:image}}
 				return
 			else
 				setTimeout ()=>
+					@removeChild @_loading if @_loading.isAttached
 					@trigger ImageView.LOADED, {item:{tag:image}}
 
 			if @_imageElement?
@@ -306,8 +306,7 @@ class ImageView extends BaseComponent
 					opacity: 0,
 					ease: Quad.easeOut,
 					onComplete: ()=>
-						@removeChild @_loading if @_loading.isAttached
-						_image = item.tag?.cloneNode()
+						_image = item.tag.cloneNode(true)
 						@_invalidateImage(_image)
 				})
 

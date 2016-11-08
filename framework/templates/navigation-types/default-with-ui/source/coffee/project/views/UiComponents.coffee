@@ -18,7 +18,12 @@ class UiComponents extends BaseView
 		super
 
 	create:(evt=null)=>
-		sampleImage = "#{app.root}media/images/fxlogo.png"
+		# @_grid = new Grid
+		# @appendChild @_grid
+		super
+
+	createComplete:(evt=null)=>
+		sampleImage = @content.logo
 
 		_testEl = new BaseDOM
 			className : 'el1'
@@ -37,6 +42,7 @@ class UiComponents extends BaseView
 		_image2 = new ImageView
 			src: sampleImage
 			fit: 'cover'
+			position: 'center top'
 			style:
 				width: '100px'
 				height: '50px'
@@ -44,24 +50,29 @@ class UiComponents extends BaseView
 
 		@_svg = new Svg
 			className: 'teste'
+			attrs:
+				width: 200
+				height: 200
 		@appendChild @_svg
 
 		_text = new Svg.Text {
 			text:'novidade',
 			attrs:{
+				x:'10'
 				y:'1em',
-				'font-family':'Verdana'
+				'font-family':'Times New Roman'
 			}
 		}
-		_text.text = ['agora', ' ', 'v', 'a', 'i', '!']
+		_text.text = ['agora ', 'v', 'a', 'i', '!']
 
 		_image = new Svg.Image {
 			attrs: {
-				'xlink:href':sampleImage
+				'xlink:href': sampleImage.tag?.src || sampleImage.src
+				x: '50%'
 			}
 		}
 
-		_rect = new Svg.Path.rect(10, 25, 80, 30, 20)
+		_rect = new Svg.Rect({ attrs: { x: '50%', y:'0', width:'100', height:'100'} })
 		_image.clipPath(_rect)
 
 		@_svg.appendChild _image
@@ -69,11 +80,11 @@ class UiComponents extends BaseView
 
 		@_filter = _text.filter({attrs:{id:'blur'}}, new Svg.Filters.GaussianBlur({attrs:{in:'SourceGraphic', stdDeviation:'1'}}))
 
-		@_filterImage = _image.filter {attrs:{id:'imageFilter'}}, new Svg.Filters.Turbulence({
+		@_filterImage = _image.filter({attrs:{id:'imageFilter'}}, new Svg.Filters.Turbulence({
 				attrs: {
 					result: 'turbulence'
 					baseFrequency: '0.05'
-					numOctaves: '1'
+					numOctaves: '2'
 				}
 			}), new Svg.Filters.DisplacementMap({
 				attrs: {
@@ -83,14 +94,7 @@ class UiComponents extends BaseView
 					xChannelSelector: 'R'
 					yChannelSelector: 'A'
 				}
-			})
-		console.log @_filterImage
-
-		# @_grid = new Grid
-		# @appendChild @_grid
-		super
-
-	createComplete:(evt=null)=>
+			}))
 		super
 
 	showStart:(evt=null)=>

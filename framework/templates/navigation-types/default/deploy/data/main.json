@@ -7,7 +7,7 @@
 	"label":"Carregado",
 	"image":{
 		"id": "image",
-		"src":"{images}666x666&text=home+dummy+image.png",
+		"src":"{images}fxlogo.png",
 		"cache": true
 	}
 }

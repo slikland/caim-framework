@@ -317,7 +317,6 @@ class NavigationLoader extends EventDispatcher
 					if jsRE.test(f) then f = {src: f, type: 'text'}
 				else if f.src && jsRE.test(f.src)
 					f['type'] = 'text'
-				
 				@queue.loadFile(f, false)
 		if p_files.length > 0
 			@queue.load()
@@ -388,6 +387,12 @@ class NavigationLoader extends EventDispatcher
 				catch e
 					if document.all
 						document.styleSheets[si].cssText = data
+
+			else
+				result = evt.target.getResult(evt.item.id || evt.item.src)
+				if result instanceof Element
+					evt.item.tag = result
+
 		false
 
 	###*
