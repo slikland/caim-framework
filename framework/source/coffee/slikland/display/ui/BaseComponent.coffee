@@ -6,13 +6,12 @@ class BaseComponent extends BaseDOM
 
 	@const BASE_CLASSNAME: 'component'
 
-	@const DEFAULT_OPTIONS: {
+	@const DEFAULT_OPTIONS:
 		className: @BASE_CLASSNAME
 		element: 'div'
 		attrs: {
 			id: null
 		}
-	}
 
 	#Events Constants
 	@const INVALIDATE_OPTIONS: 'invalidate-options'
@@ -26,7 +25,7 @@ class BaseComponent extends BaseDOM
 
 		@_applyStyle()
 
-		@_options = ObjectUtils.merge({}, @constructor.DEFAULT_OPTIONS)
+		@_options = ObjectUtils.merge(p_options, @constructor.DEFAULT_OPTIONS)
 
 		if p_options instanceof Element
 			p_options = { element: p_options }
@@ -57,13 +56,11 @@ class BaseComponent extends BaseDOM
 		if value?
 			if !(value instanceof BaseDOM) && !(value instanceof Node)
 				throw new Error('Parent instance is not either Node or BaseDOM')
-			_lastParent = @_parent
 			@_parent = value
-			@_added() if !_lastParent?
-		else if @isAttached
+			@_added() if @isAttached
+		else if !@isAttached
 			@_parent = null
-			@_removed() if _lastParent?
-			_lastParent = null
+			@_removed()
 
 	option:(p_name, p_value = null)->
 		if typeof p_name is 'string'
@@ -110,12 +107,7 @@ class BaseComponent extends BaseDOM
 
 	setOptions:(p_options=null)->
 		if p_options?
-
-			p_options = ObjectUtils.merge(p_options, ObjectUtils.merge(@_options || {}, @constructor.DEFAULT_OPTIONS, false))
-
-			# Updates and save current options data
-			@_options = p_options
-
+			@_options = ObjectUtils.merge(p_options, ObjectUtils.merge({}, @_options))
 			@_invalidateOptions()
 
 	_invalidateOptions:(property = null)->
@@ -144,7 +136,7 @@ class BaseComponent extends BaseDOM
 		@trigger(@constructor.REMOVED, @)
 
 	_applyStyle:()->
-		if @constructor.STYLE? and @constructor.STYLE.replace(/\s+/g) isnt  ''
+		if @constructor.STYLE? and @constructor.STYLE.replace(/\s+/g) isnt ''
 			styleId = "#{@constructor.BASE_CLASSNAME}-styles"
 			head = document.querySelector("head") || document.getElementsByTagName("head")[0]
 			currentStyle = head.querySelector("##{styleId}")
@@ -163,5 +155,5 @@ class BaseComponent extends BaseDOM
 	destroy:()->
 		@_created = @_ready = false
 		@_options = null
-		@removeAll?()
+		@removeAll?(true)
 		super

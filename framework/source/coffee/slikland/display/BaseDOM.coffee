@@ -61,6 +61,13 @@ Base DOM manipulation class
 ###
 
 class BaseDOM extends EventDispatcher
+
+	@isElement:(p_target)->
+		if typeof HTMLElement is 'object'
+			return p_target instanceof HTMLElement or p_target instanceof BaseDOM
+		else
+			return typeof p_target is 'object' && p_target?.nodeType is 1 && typeof p_target?.nodeName is 'string'
+
 	#
 	# Deprecated params: constructor:(element = 'div', className = null, namespace = null)->
 	#
@@ -124,7 +131,6 @@ class BaseDOM extends EventDispatcher
 	##	Instance bounds. Only getters.
 	##	If changing size, use CSS.
 	##--------------------------------------
-
 	@get width:()->
 		return @getBounds().width
 	@get height:()->
@@ -181,7 +187,6 @@ class BaseDOM extends EventDispatcher
 	##--------------------------------------
 	##	DOM Manipulation
 	##--------------------------------------
-
 	@get isAttached:()->
 		return document.contains?(@element) || document.body.contains(@element)
 
@@ -227,10 +232,7 @@ class BaseDOM extends EventDispatcher
 				child.removeAll(true)
 				child.destroy()
 				return child
-			else
-				el = child.element
-		try
-			return @element.removeChild(el)
+		return @element.removeChild(child)
 
 	removeChildAt:(index = -1)->
 		if index < @childNodes.length
@@ -241,17 +243,19 @@ class BaseDOM extends EventDispatcher
 		i = childs.length
 		while i-- > 0
 			domInstance = childs[i].__instance__
-			@removeChild(domInstance || childs[i], !!domInstance)
+			@removeChild(domInstance || childs[i], !!domInstance and !!destroy)
 
 	##--------------------------------------
 	##	Check if the instance matches a query selector
 	##--------------------------------------
 	matches:(query)->
 		return @element.matches(query)
+
 	##--------------------------------------
 	##	Find parent nodes for a matching query selector
 	findParents:(query)->
 		return @element.findParents(query)
+
 	##--------------------------------------
 	##	Query selector
 	##	@onlyInstances: If return only BaseDOM instances
@@ -333,8 +337,7 @@ class BaseDOM extends EventDispatcher
 				@_css(k, v)
 
 	##--------------------------------------
-	##	Set / Get element ComputedStyle
-	##	Accepts object:
+	##	Get element ComputedStyle
 	##	@example:
 	##	style('minHeight')
 	##--------------------------------------
@@ -352,7 +355,6 @@ class BaseDOM extends EventDispatcher
 	##--------------------------------------
 	##	CSS Class name manipulation
 	##--------------------------------------
-
 	addClass:(className)->
 		if typeof(className) is 'string'
 			className = className.replace(/\s+/ig, ' ').split(' ')

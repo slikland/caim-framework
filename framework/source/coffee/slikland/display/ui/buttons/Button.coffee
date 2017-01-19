@@ -1,5 +1,6 @@
 #import slikland.display.ui.BaseComponent
 #import slikland.utils.URLUtils
+#import slikland.utils.ObjectUtils
 
 class Button extends BaseComponent
 
@@ -14,7 +15,8 @@ class Button extends BaseComponent
 	@const DEFAULT_OPTIONS: ObjectUtils.merge({
 			className: @BASE_CLASSNAME
 			element: 'a'
-			label: ''
+			label: null
+			labelClassName: 'label'
 			selected: false
 			attrs: {
 				href: null
@@ -27,10 +29,16 @@ class Button extends BaseComponent
 
 		#params
 		@_selected = @_options.selected
-
+		@create()
 
 	# Getters and Setters
 	#------------------------------------
+
+	@get text:()->
+		return @_options.label
+
+	@set text:(p_value)->
+		@option('label', p_value)
 
 	@get label:()->
 		return @_label
@@ -64,12 +72,19 @@ class Button extends BaseComponent
 	_layoutButton:()->
 		@_label = new BaseDOM
 			element: 'span'
-			className: 'label'
+			className: "#{@_options.labelClassName.trim()}"
 
 	_invalidate:()->
 		_href = @_options.attrs?.href
 		# Adds href and checks url strategy
 		if _href?
+			if _href.indexOf('@') is 0
+				_targetView = _href.substr(1)
+				_viewConfig = app.config.views[_targetView]
+				if _viewConfig?.dialog
+					_href = "?#{_viewConfig.route}"
+				else
+					_href = _viewConfig?.route || "#{_targetView}"
 			if _href.indexOf('://') is -1 && _href.indexOf('{root}') is -1
 				if _href.indexOf('/') is 0
 					_href = _href.substr(1)
@@ -110,17 +125,25 @@ class Button extends BaseComponent
 			route = link?.replace(app.root, '')
 			return if !app.navigation.routeData
 
+			routeData = app.navigation.routeData
+			targetParams = URLUtils.parseParams(route.replace(/(.*\?)?/gi, ''))
+			mergeParams = ObjectUtils.merge(targetParams, routeData.params)
+			for k,v of mergeParams
+				if v is ''
+					delete mergeParams[k]
+
 			if route[0] is '?'
-				r = '?'
-				routeData = app.navigation.routeData
-				cleanLink = routeData.raw.replace(/\?.*/gi, '')
-				cleanLink = cleanLink.replace(app.root.replace(/\/$/gi, ''), '')
-				for k,v of routeData.params
-					r += k + '=' + v + '&'
-				r += route.replace('?', '')
-				app.navigation.setRoute('/' + cleanLink + r, true)
+				route = routeData.raw.replace(/\/?\?.*/gi, '') + route
+
+			r = ''
+			for k,v of mergeParams
+				r += k + '=' + v + '&'
+			if r isnt ''
+				r = '?' + r
 			else
-				app.navigation.setRoute('/' + route, true)
+				route = route.replace(/\?.*/gi, '')
+
+			app.navigation.setRoute('/' + route + r, true)
 
 	over:(e)=>
 		@trigger Button.BUTTON_OVER

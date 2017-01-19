@@ -39,7 +39,7 @@ tasks:
 	mainCSS:
 		src: 'main.styl'
 		output: '{project.deploy}css/main.css'
-	
+
 	fontsCSS:
 		src: 'fonts.styl'
 		output: '{project.deploy}css/fonts.css'

@@ -13,7 +13,6 @@
 
 	<body>
 		<div style="position: absolute; top: -9999999px; left: -9999999px; width: 0px; height: 0px; overflow: hidden;" id="hiddenFonts">
-			<span style="font-family: Helvetica; font-style:normal;">abc 123</span>
 		</div>
 	</body>
 </html>

@@ -17,13 +17,315 @@
 		}
 	},
 
-	"image":{
-		"id":"dummy",
-		"src":"{images}dummy.png"
+	"bottle":{
+		"id":"bottle",
+		"src":"{images}Garrafa-300ml.png"
 	},
 
-	"logo":{
-		"id":"fxlogo",
-		"src":"{images}fxlogo.png"
-	}
+	"grid":[
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517555-9365596.jpg",
+            "text": "O #BatuquedaBOA teve várias atrações culturais e muito, muito samba. Se liga no que rolou nas 48h da maior virada cultural do samba que o Rio já viu!",
+            "href": "https://www.facebook.com/232948993387746/posts/1489888744360425",
+            "user": "@Antarctica",
+            "date": "26/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "https://www.youtube.com/watch?v=pbIALTXahzI",
+            "cover": {
+                "src": "http://www.antarctica.com.br/dynamic/images/social/1477507625-5727950.jpg",
+                "loadWithView": false
+            },
+            "text": "Antarctica | #BatuquedaBOA | O que rolou"
+        },
+        "type": "youtube",
+        "icon": {
+            "id": "youtube"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511179-8529644.jpg",
+            "text": "As cenas de Guto (@tgmartins) a caminho do trabalho foram gravadas em um ônibus de verdade, que rodou alguns quarteirões pelo Centro.\n\nEm #NoGogó, Guto também tem vida própria nas redes sociais: @GutoBOA aqui no insta e /GutoBOA no Facebook.\n\nFique ligado",
+            "href": "https://www.instagram.com/p/BL9tLNyDRqt/",
+            "user": "@antarcticaboa",
+            "date": "24/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517555-2163666.jpg",
+            "text": "De 1 a 9, como vocês estão se sentindo hoje?\n\nJá assistiu a #NoGogó? Os episódios 1 e 2 já estão disponíveis. Se liga: https://goo.gl/1TRPzc",
+            "href": "https://www.facebook.com/232948993387746/posts/1488570467825586",
+            "user": "@Antarctica",
+            "date": "24/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511180-9265536.jpg",
+            "text": "Hoje é sexta BOA e Kiko já tá no clima! Quem Mais?\nEm #NoGogó, ele assume o isopor e empurra o Guto pra Duda. Assista nos canais da BOA.\n\nBeba com moderação.",
+            "href": "https://www.instagram.com/p/BL1dSlgjMwK/",
+            "user": "@antarcticaboa",
+            "date": "21/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 4
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517555-9983288.jpg",
+            "text": "Abastecendo para o fim de semana. #TônaBOAJá assistiu a #NoGogó? O primeiro e o segundo episódios já estão disponíveis. Se liga: https://goo.gl/nuxHfj",
+            "href": "https://www.facebook.com/232948993387746/posts/1484997421516224",
+            "user": "@Antarctica",
+            "date": "21/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511180-5913074.jpg",
+            "text": "Em #NoGogó, Guto (@tgmartins) compõe uma música especial para sua musa, a Duda. Mas na real, quem fez mesmo foi a galera do Cacique de Ramos junto com o Fundo de Quintal. \"Duda\" já está disponível no canal da BOA no Spotify (Batuque da BOA) na playlist cr",
+            "href": "https://www.instagram.com/p/BLy4mxyDCh9/",
+            "user": "@antarcticaboa",
+            "date": "20/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 4
+        },
+        "priority": 1,
+        "content": {
+            "media": "https://www.youtube.com/watch?v=VFesFRgjOM8",
+            "cover": {
+                "src": "http://www.antarctica.com.br/dynamic/images/social/1477507625-1082543.jpg",
+                "loadWithView": false
+            },
+            "text": "#NoGogó  O que você não viu da série  Batuque da BOA"
+        },
+        "type": "youtube",
+        "icon": {
+            "id": "youtube"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511180-964741.jpg",
+            "text": "Entre uma cena e outra em um dos cenários mais lindos do Rio, eis a Duda, musa inspiradora de Guto (@tgmartins) em #NoGogó. \nNa vida real, ela é Eline Porto (@elinemesmo), atriz e cantora das BOAs. \nFica ligado nos canais da Antarctica para acompanhar ess",
+            "href": "https://www.instagram.com/p/BLvpazfDFTr/",
+            "user": "@antarcticaboa",
+            "date": "19/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 4
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517556-4586454.jpg",
+            "text": "Vamos Guto da BOA que a diretoria não aguenta mais esperar! Chegou a hora de “Esquentando os Tamborins”, o 2º episódio de #NoGogó! Aperta o play!  Com Thiago Martins e Eline Porto.",
+            "href": "https://www.facebook.com/232948993387746/posts/1480596635289636",
+            "user": "@Antarctica",
+            "date": "18/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 4
+        },
+        "priority": 1,
+        "content": {
+            "media": "https://www.youtube.com/watch?v=SKtWCX7dyd8",
+            "cover": {
+                "src": "http://www.antarctica.com.br/dynamic/images/social/1477507626-6837974.jpg",
+                "loadWithView": false
+            },
+            "text": "#NoGogó  EP02  Esquentando os tamborins"
+        },
+        "type": "youtube",
+        "icon": {
+            "id": "youtube"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511180-7779431.jpg",
+            "text": "Esse é Quico Meirelles da @o2filmes, grande diretor! É ele quem orquestra as cenas da nossa websérie, #NoGogó. \nFica ligado nos canais da Antarctica para acompanhar essa história.",
+            "href": "https://www.instagram.com/p/BLqtRbpjRlt/",
+            "user": "@antarcticaboa",
+            "date": "17/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 4
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517556-3690344.jpg",
+            "text": "O samba é recheado de talento, emoção e, claro, superstição. Se liga em algumas das mais famosas. #NoGogó",
+            "href": "https://www.facebook.com/232948993387746/posts/1477101388972494",
+            "user": "@Antarctica",
+            "date": "14/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477511181-2113876.jpg",
+            "text": "A série #NoGogó começa como grandes sambas e bambas: debaixo da Tamarineira do Cacique de Ramos. Reza a lenda que quem tem bom coração e\nalgum talento especial, terá sorte pro resto da vida se nela encostar. E Guto (@tgmartins), que não é bobo nem nada, v",
+            "href": "https://www.instagram.com/p/BLhhmTkjHnM/",
+            "user": "@antarcticaboa",
+            "date": "13/10/2016",
+            "target": "_blank"
+        },
+        "type": "instagram",
+        "icon": {
+            "id": "instagram"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "http://www.antarctica.com.br/dynamic/images/social/1477517556-7552186.jpg",
+            "text": "A nova websérie da BOA conta a história de Guto da BOA, um ambulante boa praça que se mete numa roubada quando conhece sua musa, a Duda. Conheça mais sobre os personagens que fazem parte de #NoGogó. Fique ligado, o primeiro e o segundo episódio já estão d",
+            "href": "https://www.facebook.com/232948993387746/posts/1473528572663109",
+            "user": "@Antarctica",
+            "date": "11/10/2016",
+            "target": "_blank"
+        },
+        "type": "facebook",
+        "icon": {
+            "id": "facebook"
+        }
+    },
+    {
+        "size": {
+            "row": 2,
+            "col": 2
+        },
+        "priority": 1,
+        "content": {
+            "media": "https://www.youtube.com/watch?v=UOHXHTd8FW0",
+            "cover": {
+                "src": "http://www.antarctica.com.br/dynamic/images/social/1477509406-8199275.jpg",
+                "loadWithView": false
+            },
+            "text": "Antarctica | Caranguejo"
+        },
+        "type": "youtube",
+        "icon": {
+            "id": "youtube"
+        }
+    }
+	]
 }

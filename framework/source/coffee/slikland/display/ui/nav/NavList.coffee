@@ -1,7 +1,7 @@
 #import slikland.display.BaseDOM
 #import slikland.display.ui.BaseComponent
 #import slikland.utils.ObjectUtils
-#import antarctica-gogo.display.ui.nav.NavItem
+#import slikland.display.ui.nav.NavItem
 
 class NavList extends BaseComponent
 
@@ -13,16 +13,16 @@ class NavList extends BaseComponent
 	@const BASE_CLASSNAME: 'nav-list'
 
 	@const DEFAULT_OPTIONS: ObjectUtils.merge({
-		className: @BASE_CLASSNAME
-		element: 'nav'
-		value: null
-		selected: -1
-		item: {}
-	}, @DEFAULT_OPTIONS)
+			className: @BASE_CLASSNAME
+			element: 'nav'
+			value: null
+			selected: -1
+			item: {}
+		}, @DEFAULT_OPTIONS)
 
 	constructor:(p_options = null)->
 		@_selected = @constructor.DEFAULT_OPTIONS.selected
-		@_data = null
+		@_data = []
 		@_items = []
 		@_delegate = @constructor.defaultDelegate
 
@@ -36,6 +36,9 @@ class NavList extends BaseComponent
 	# Getters and Setters
 	#------------------------------------
 
+	@get container:()->
+		return @_wrapper
+
 	@get currentIndex:()->
 		return @_selected
 
@@ -45,14 +48,8 @@ class NavList extends BaseComponent
 	@get data:()->
 		return @_data
 
-	@set data:(p_data=null)->
-
-		if p_data? and Array.isArray(p_data) and p_data isnt @_data
-			@_selected = -1
-			@_data = @_options.data = p_data
-			@_render()
-		else
-			@_clear()
+	@set data:(p_value)->
+		@option('data', p_value)
 
 	@get itemDelegate:()->
 		return @_delegate
@@ -72,12 +69,20 @@ class NavList extends BaseComponent
 		@_items?.length = 0
 		super
 
+	_applyData:(p_data=null)=>
+		if p_data? and Array.isArray(p_data) and p_data isnt @_data
+			@_selected = -1
+			@_data = @_options.data = p_data
+			@_render()
+		else
+			@_clear()
+
 	# Public
 	#------------------------------------------
 	componentLayout:()->
 		@_wrapper = new BaseDOM
 			element: 'ul'
-			className: "#{@constructor.BASE_CLASSNAME}-container"
+			className: "#{@constructor.BASE_CLASSNAME}__container"
 		@appendChild @_wrapper
 
 	select:(p_index = 0, p_trigger=false)->
@@ -94,7 +99,7 @@ class NavList extends BaseComponent
 	#------------------------------------------
 	_invalidate:()->
 		super
-		@data = @_options.data if @_options.data?
+		@_applyData(@_options.data) if @_options.data?
 		for item in @_items
 			item.option('item', @_options.item)
 		if @_options.selected isnt @constructor.DEFAULT_OPTIONS and @_options.selected isnt @_selected
@@ -108,7 +113,7 @@ class NavList extends BaseComponent
 
 		for index, value of @data
 			_index = parseInt(index)
-			_value = ObjectUtils.merge(ObjectUtils.merge({}, @_options.item), value)
+			_value = ObjectUtils.merge(value, @_options.item)
 			_item = @itemDelegate(_value, _index, @data)
 			if _item? and _item instanceof NavItem
 				_item.on NavItem.CLICK, @_didItemClick
@@ -118,7 +123,6 @@ class NavList extends BaseComponent
 				_item.value = value.value if value.value?
 				@_wrapper.appendChild _item
 				@_items.push _item
-				_item.create()
 
 	_clear:()->
 		while @_items.length > 0

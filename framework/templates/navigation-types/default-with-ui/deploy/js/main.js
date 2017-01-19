@@ -2481,7 +2481,9 @@ Svg.Symbol = (function(_super) {
     if (p_options == null) {
       p_options = {};
     }
-    p_options.element = 'symbol';
+    if (!(p_options.element instanceof Element)) {
+      p_options.element = 'symbol';
+    }
     Symbol.__super__.constructor.call(this, p_options);
   }
   return Symbol;
@@ -2679,8 +2681,10 @@ Svg.Path = (function(_super) {
       options.attrs = {};
     }
     options.attrs.d = d;
-    this._path = new Svg.Path(options);
-    return this._path;
+    if (!!options.result) {
+      return d;
+    }
+    return new Svg.Path(options);
   };
   Path.rect = function(x, y, width, height, radius, options) {
     var d;
@@ -2704,12 +2708,60 @@ Svg.Path = (function(_super) {
     }
     radius = Math.min(radius, height / 2);
     d = ("M " + (x + radius) + "," + y) + ("h " + (width - 2 * radius)) + ("a " + radius + "," + radius + " 0 0 1 " + radius + "," + radius) + ("v " + (height - 2 * radius)) + ("a " + radius + "," + radius + " 0 0 1 " + (-radius) + "," + radius) + ("h " + (2 * radius - width)) + ("a " + radius + "," + radius + " 0 0 1 " + (-radius) + "," + (-radius)) + ("v " + (2 * radius - height)) + ("a " + radius + "," + radius + " 0 0 1 " + radius + "," + (-radius)) + "z";
+    if (!!options.result) {
+      return d;
+    }
     if (options.attrs == null) {
       options.attrs = {};
     }
     options.attrs.d = d;
-    this._path = new Svg.Path(options);
-    return this._path;
+    return new Svg.Path(options);
+  };
+  Path.arc = function(x, y, rx, ry, startAngle, endAngle, sweepFlag, options) {
+    var d, end, ex, ey, largeArcFlag, start, sx, sy;
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    if (rx == null) {
+      rx = 100;
+    }
+    if (ry == null) {
+      ry = 100;
+    }
+    if (sweepFlag == null) {
+      sweepFlag = 1;
+    }
+    if (options == null) {
+      options = {};
+    }
+    start = this._polarToCartesian(x, y, rx, ry, endAngle);
+    end = this._polarToCartesian(x, y, rx, ry, startAngle);
+    largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+    console.log(start.x, end.x, end.x - start.x);
+    sx = Math.max(start.x, rx);
+    sy = Math.max(start.y, ry);
+    ex = Math.max(end.x, rx);
+    ey = Math.max(end.y, ry);
+    d = ["M", x, Math.max(y, y + ry), "a", rx, ry, 0, largeArcFlag, sweepFlag, end.x - start.x, end.y - start.y].join(" ");
+    if (!!options.result) {
+      return d;
+    }
+    if (options.attrs == null) {
+      options.attrs = {};
+    }
+    options.attrs.d = d;
+    return new Svg.Path(options);
+  };
+  Path._polarToCartesian = function(centerX, centerY, rx, ry, angleInDegrees) {
+    var angleInRadians;
+    angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+    return {
+      x: centerX + (rx * Math.cos(angleInRadians)),
+      y: centerY + (ry * Math.sin(angleInRadians))
+    };
   };
   return Path;
 })(Svg.Asset);
@@ -2730,26 +2782,6 @@ Svg.ClipPath = (function(_super) {
     ClipPath.__super__.constructor.call(this, p_options);
   }
   return ClipPath;
-})(Svg.Asset);
-Svg.TextPath = (function(_super) {
-  __extends(TextPath, _super);
-  TextPath["const"]({
-    DEFAULT_OPTIONS: ObjectUtils.merge({
-      attrs: {
-        startOffset: null,
-        method: null,
-        spacing: null
-      }
-    }, TextPath.DEFAULT_OPTIONS)
-  });
-  function TextPath(p_options) {
-    if (p_options == null) {
-      p_options = {};
-    }
-    p_options.element = 'textPath';
-    TextPath.__super__.constructor.call(this, p_options);
-  }
-  return TextPath;
 })(Svg.Asset);
 Svg.Text = (function(_super) {
   __extends(Text, _super);
@@ -2772,7 +2804,7 @@ Svg.Text = (function(_super) {
     if (p_options == null) {
       p_options = {};
     }
-    if (p_options.element !== 'tspan') {
+    if (p_options.element !== 'tspan' && p_options.element !== 'textPath') {
       p_options.element = 'text';
     }
     Text.__super__.constructor.call(this, p_options);
@@ -2798,6 +2830,46 @@ Svg.Text = (function(_super) {
       });
     }
     return Svg.createTref((_ref1 = this._options.attrs) != null ? _ref1.id : void 0, p_options);
+  };
+  Text.prototype.textPath = function(p_svgElement, p_textPathOptions) {
+    var _ref, _ref1, _ref2, _ref3, _ref4;
+    if (p_svgElement == null) {
+      p_svgElement = null;
+    }
+    if (p_textPathOptions == null) {
+      p_textPathOptions = {};
+    }
+    if (p_svgElement instanceof Svg.Asset) {
+      if (((_ref = p_svgElement.options.attrs) != null ? _ref.id : void 0) == null) {
+        p_svgElement.option('attrs', {
+          id: StringUtils.random()
+        });
+      }
+      if (!!this._currentTextPath) {
+        this._currentTextPath.option('attrs', {
+          id: (_ref1 = p_svgElement.options.attrs) != null ? _ref1.id : void 0
+        });
+        this._currentTextPath.path = p_svgElement;
+        if ((_ref2 = this.root) != null) {
+          _ref2.defs.appendChild(this._currentTextPath.path);
+        }
+      } else {
+        if (p_textPathOptions.attrs == null) {
+          p_textPathOptions.attrs = {};
+        }
+        p_textPathOptions.attrs['xlink:href'] = "#" + ((_ref3 = p_svgElement.options.attrs) != null ? _ref3.id : void 0);
+        this._currentTextPath = new Svg.TextPath(p_textPathOptions);
+        this.appendChild(this._currentTextPath);
+        this._currentTextPath.path = p_svgElement;
+        if ((_ref4 = this.root) != null) {
+          _ref4.defs.appendChild(this._currentTextPath.path);
+        }
+      }
+      return this._currentTextPath;
+    } else if ((p_svgElement == null) && !!this._currentTextPath) {
+      this._currentTextPath.destroy();
+    }
+    return this._currentTextPath;
   };
   Text.prototype._invalidate = function() {
     var index, value, _i, _len, _ref, _ref1, _ref2, _results;
@@ -2832,6 +2904,14 @@ Svg.Text = (function(_super) {
     this.appendChild(_span);
     return _span;
   };
+  Text.prototype._added = function() {
+    var _ref, _ref1, _ref2;
+    console.log((_ref = this._currentTextPath) != null ? _ref.path : void 0);
+    if ((this._currentTextPath != null) && !((_ref1 = this._currentTextPath) != null ? (_ref2 = _ref1.path) != null ? _ref2.isAttached : void 0 : void 0)) {
+      this.root.defs.appendChild(this._currentTextPath.path);
+    }
+    return Text.__super__._added.apply(this, arguments);
+  };
   return Text;
 })(Svg.Asset);
 Svg.Text.Span = (function(_super) {
@@ -2844,6 +2924,26 @@ Svg.Text.Span = (function(_super) {
     Span.__super__.constructor.call(this, p_options);
   }
   return Span;
+})(Svg.Text);
+Svg.TextPath = (function(_super) {
+  __extends(TextPath, _super);
+  TextPath["const"]({
+    DEFAULT_OPTIONS: ObjectUtils.merge({
+      attrs: {
+        startOffset: null,
+        method: null,
+        spacing: null
+      }
+    }, Svg.Asset.DEFAULT_OPTIONS)
+  });
+  function TextPath(p_options) {
+    if (p_options == null) {
+      p_options = {};
+    }
+    p_options.element = 'textPath';
+    TextPath.__super__.constructor.call(this, p_options);
+  }
+  return TextPath;
 })(Svg.Text);
 Svg.Image = (function(_super) {
   __extends(Image, _super);
@@ -3454,6 +3554,9 @@ var GridFrame;
 GridFrame = (function(_super) {
   __extends(GridFrame, _super);
   GridFrame["const"]({
+    BASE_CLASSNAME: 'grid-frame'
+  });
+  GridFrame["const"]({
     DEFAULT_SIZE: {
       col: 1,
       row: 1
@@ -3606,7 +3709,7 @@ GridFrame = (function(_super) {
   };
   GridFrame.prototype.requestLoad = function() {
     var _ref;
-    return (_ref = this._view) != null ? _ref.requestLoad() : void 0;
+    return (_ref = this._view) != null ? typeof _ref.requestLoad === "function" ? _ref.requestLoad() : void 0 : void 0;
   };
   GridFrame.prototype.destroy = function() {
     this.clearView();
@@ -3635,16 +3738,7 @@ var Grid;
 Grid = (function(_super) {
   __extends(Grid, _super);
   Grid["const"]({
-    DEFAULT_MAX_COLUMNS: 10
-  });
-  Grid["const"]({
-    DEFAULT_MIN_COLUMNS: 2
-  });
-  Grid["const"]({
-    DEFAULT_FLEX_COLUMNS: {
-      min: 320,
-      max: 1440
-    }
+    BASE_CLASSNAME: 'grid'
   });
   Grid["const"]({
     GRIDFRAME_CREATE: 'grid_gridframe_create'
@@ -3659,7 +3753,16 @@ Grid = (function(_super) {
     GRIDFRAME_HIDE: 'grid_gridframe_hide'
   });
   Grid["const"]({
-    BASE_CLASSNAME: 'grid'
+    DEFAULT_MAX_COLUMNS: 10
+  });
+  Grid["const"]({
+    DEFAULT_MIN_COLUMNS: 2
+  });
+  Grid["const"]({
+    DEFAULT_FLEX_COLUMNS: {
+      min: 320,
+      max: 1440
+    }
   });
   Grid["const"]({
     DEFAULT_OPTIONS: ObjectUtils.merge({
@@ -3690,7 +3793,8 @@ Grid = (function(_super) {
     this._firstRender = false;
     p_options.element = 'section';
     Grid.__super__.constructor.call(this, p_options);
-    this._resize = FunctionUtils.throttle(this._resize, 200);
+    this._resizeThrottle = FunctionUtils.throttle(this._resize, 200);
+    this.create();
   }
   Grid.get({
     maxColumns: function() {
@@ -3699,7 +3803,8 @@ Grid = (function(_super) {
   });
   Grid.set({
     maxColumns: function(p_value) {
-      return this.option('maxColumns', p_value);
+      this._maxColumns = p_value;
+      return this.layout();
     }
   });
   Grid.get({
@@ -3709,7 +3814,8 @@ Grid = (function(_super) {
   });
   Grid.set({
     minColumns: function(p_value) {
-      return this.option('minColumns', p_value);
+      this._minColumns = p_value;
+      return this.layout();
     }
   });
   Grid.get({
@@ -3738,6 +3844,30 @@ Grid = (function(_super) {
         }
       }
       return this._growMode;
+    }
+  });
+  Grid.set({
+    sourceData: function(p_data) {
+      var _ref, _ref1;
+      if (p_data == null) {
+        p_data = null;
+      }
+      this.reset();
+      if (p_data != null) {
+        this._sourceData = p_data;
+        this.maxColumns = this._sourceData.maxColumns || this.constructor.DEFAULT_MAX_COLUMNS;
+        this.minColumns = this._sourceData.minColumns || this.constructor.DEFAULT_MIN_COLUMNS;
+        this._currentColumns = this.maxColumns;
+        this._flexMin = ((_ref = this._sourceData.flexColumns) != null ? _ref.min : void 0) || this.constructor.DEFAULT_FLEX_COLUMNS.min;
+        this._flexMax = ((_ref1 = this._sourceData.flexColumns) != null ? _ref1.max : void 0) || this.constructor.DEFAULT_FLEX_COLUMNS.max;
+        this._updateColumns();
+        return this.items = p_data.items || [];
+      }
+    }
+  });
+  Grid.get({
+    sourceData: function() {
+      return this._sourceData;
     }
   });
   Grid.get({
@@ -3770,7 +3900,7 @@ Grid = (function(_super) {
           }
           if (_itemData != null) {
             item.data = _itemData;
-            _results.push(this.trigger(Grid.GRIDFRAME_CREATE, {
+            _results.push(this.trigger(this.constructor.GRIDFRAME_CREATE, {
               frame: item
             }));
           } else {
@@ -3810,7 +3940,7 @@ Grid = (function(_super) {
                 if (typeof _frame.destroy === "function") {
                   _frame.destroy();
                 }
-                this.trigger(Grid.GRIDFRAME_DESTROY, {
+                this.trigger(this.constructor.GRIDFRAME_DESTROY, {
                   frame: _frame
                 });
               }
@@ -3851,14 +3981,14 @@ Grid = (function(_super) {
   };
   Grid.prototype.createComplete = function() {
     this._resize();
-    Resizer.getInstance().on(Resizer.RESIZE, this._resize);
+    Resizer.getInstance().on(Resizer.RESIZE, this._resizeThrottle);
     window.addEventListener('scroll', this._didScroll);
     this._invalidateOptions();
     return this.trigger(this.constructor.CREATE);
   };
   Grid.prototype.destroy = function() {
     var _ref;
-    Resizer.getInstance().off(Resizer.RESIZE, this._resize);
+    Resizer.getInstance().off(Resizer.RESIZE, this._resizeThrottle);
     this.reset();
     this._initialized = false;
     this._firstRender = false;
@@ -3868,17 +3998,6 @@ Grid = (function(_super) {
     delete this._packer;
     this._packer = null;
     return Grid.__super__.destroy.apply(this, arguments);
-  };
-  Grid.prototype._invalidate = function() {
-    var _ref, _ref1;
-    Grid.__super__._invalidate.apply(this, arguments);
-    this._maxColumns = this._options.maxColumns || Grid.DEFAULT_MAX_COLUMNS;
-    this._minColumns = this._options.minColumns || Grid.DEFAULT_MIN_COLUMNS;
-    this._currentColumns = this._maxColumns;
-    this._flexMin = ((_ref = this._options.flexColumns) != null ? _ref.min : void 0) || Grid.DEFAULT_FLEX_COLUMNS.min;
-    this._flexMax = ((_ref1 = this._options.flexColumns) != null ? _ref1.max : void 0) || Grid.DEFAULT_FLEX_COLUMNS.max;
-    this._updateColumns();
-    return this.items = this._options.items || [];
   };
   Grid.prototype.reset = function() {
     var k, v, _item, _ref;
@@ -3974,7 +4093,7 @@ Grid = (function(_super) {
         frame.css({
           position: 'absolute'
         });
-        _results.push(this.trigger(Grid.GRIDFRAME_CREATE, {
+        _results.push(this.trigger(this.constructor.GRIDFRAME_CREATE, {
           frame: frame
         }));
       } else {
@@ -3984,7 +4103,7 @@ Grid = (function(_super) {
     return _results;
   };
   Grid.prototype._updateChildren = function(cellSize) {
-    var blocks, frame, _length;
+    var blocks, frame, _length, _ref;
     blocks = [];
     this._resetFillers();
     _length = this._childs.length;
@@ -4001,7 +4120,7 @@ Grid = (function(_super) {
         w: cellSize * frame.size.col,
         h: cellSize * frame.size.row,
         frame: frame,
-        type: frame.data.type
+        type: (_ref = frame.data) != null ? _ref.type : void 0
       });
     }
     if (!isNaN(cellSize)) {
@@ -4016,7 +4135,7 @@ Grid = (function(_super) {
       if (typeof frame.destroy === "function") {
         frame.destroy();
       }
-      this.trigger(Grid.GRIDFRAME_DESTROY, {
+      this.trigger(this.constructor.GRIDFRAME_DESTROY, {
         frame: frame
       });
     }
@@ -4137,6 +4256,7 @@ Grid = (function(_super) {
     }
     this._fillingCount = blocks.length;
     this._fillingBlockNodes = [];
+    this._fillerStateItems = ArrayUtils.shuffle(this._fillerItems);
     for (k in blocks) {
       cell = blocks[k];
       if (cell.fit) {
@@ -4342,20 +4462,20 @@ Grid = (function(_super) {
     }
   };
   Grid.prototype._createFillBlock = function(block, cell) {
-    var fillerData, frame, k, updatedData, _coords, _copyItems, _itemData;
+    var fillerData, frame, k, updatedData, _coords, _itemData, _ref;
     if (block.fit && this._root) {
       this._fillingCount++;
       updatedData = false;
-      if (Array.isArray(this._fillerItems) && this._fillerItems.length > 0 && (block.data.type == null)) {
+      if (Array.isArray(this._fillerStateItems) && (block.data.type == null)) {
         _itemData = null;
-        _copyItems = ArrayUtils.shuffle(this._fillerItems);
-        for (k in _copyItems) {
-          fillerData = _copyItems[k];
-          if (block.data.size.row === fillerData.size.row && block.data.size.col === fillerData.size.col) {
-            _itemData = _copyItems.splice(k, 1)[0];
-            _copyItems.push(_itemData);
-            break;
-          }
+        _ref = this._fillerStateItems;
+        for (k in _ref) {
+          fillerData = _ref[k];
+          fillerData.size.row = block.data.size.row;
+          fillerData.size.col = block.data.size.col;
+          _itemData = this._fillerStateItems.splice(k, 1)[0];
+          this._fillerStateItems.push(_itemData);
+          break;
         }
         if (_itemData != null) {
           block.data = _itemData;
@@ -4370,7 +4490,7 @@ Grid = (function(_super) {
       });
       this._wrapper.appendChild(frame);
       this._fillerBlocks.push(frame);
-      this.trigger(Grid.GRIDFRAME_CREATE, {
+      this.trigger(this.constructor.GRIDFRAME_CREATE, {
         frame: frame,
         fillBlock: block
       });
@@ -4412,7 +4532,6 @@ Grid = (function(_super) {
     if (el == null) {
       el = null;
     }
-    _matches = this._getMatchesCss(el);
     _found = false;
     _relMetrics = ['vh', 'vw', 'vmin', 'vmax', '%'];
     _style = el.css(styleProp);
@@ -4432,6 +4551,7 @@ Grid = (function(_super) {
         _found = _relMetrics.indexOf(m[3]) > -1;
       }
     } else {
+      _matches = this._getMatchesCss(el);
       for (_i = 0, _len = _matches.length; _i < _len; _i++) {
         match = _matches[_i];
         re = new RegExp("" + styleProp + "\:\\s?(([\\d]{1,})+([\\w,\\%]{1,2})|auto)", "i");
@@ -4949,6 +5069,8 @@ UiComponents = (function(_super) {
     if (p_className == null) {
       p_className = null;
     }
+    this._didFrameDestroy = __bind(this._didFrameDestroy, this);
+    this._didFrameCreate = __bind(this._didFrameCreate, this);
     this.destroy = __bind(this.destroy, this);
     this.hideComplete = __bind(this.hideComplete, this);
     this.hide = __bind(this.hide, this);
@@ -4969,110 +5091,38 @@ UiComponents = (function(_super) {
       className: 'background'
     });
     this._background.css({
-      'opacity': 0,
-      'height': '100%',
-      'background-color': '#' + Math.floor(Math.random() * 16777215).toString(16)
+      position: 'absolute',
+      left: '0',
+      right: '0',
+      top: '0',
+      bottom: '0',
+      opacity: '0',
+      height: '100%',
+      'z-index': 0,
+      'background-color': '#5050ad'
     });
+    this.appendChild(this._background);
     return UiComponents.__super__.createStart.apply(this, arguments);
   };
   UiComponents.prototype.create = function(evt) {
     if (evt == null) {
       evt = null;
     }
+    this.bottleImage = this.content.bottle;
+    this.gridData = this.content.grid;
+    this._grid = new Grid;
+    this.appendChild(this._grid);
     return UiComponents.__super__.create.apply(this, arguments);
   };
   UiComponents.prototype.createComplete = function(evt) {
-    var sampleImage, _image, _image2, _rect, _ref, _testEl, _testEl2, _text;
     if (evt == null) {
       evt = null;
     }
-    sampleImage = this.content.logo;
-    _testEl = new BaseDOM({
-      className: 'el1'
-    });
-    this.appendChild(_testEl);
-    _testEl2 = new BaseDOM({
-      className: 'el2'
-    });
-    this.replaceChild(_testEl2, _testEl);
-    _image = new ImageView({
-      src: sampleImage,
-      fit: 'contain'
-    });
-    this.appendChild(_image);
-    _image2 = new ImageView({
-      src: sampleImage,
-      fit: 'cover',
-      position: 'center top',
-      style: {
-        width: '100px',
-        height: '50px'
-      }
-    });
-    this.appendChild(_image2);
-    this._svg = new Svg({
-      className: 'teste',
-      attrs: {
-        width: 200,
-        height: 200
-      }
-    });
-    this.appendChild(this._svg);
-    _text = new Svg.Text({
-      text: 'novidade',
-      attrs: {
-        x: '10',
-        y: '1em',
-        'font-family': 'Times New Roman'
-      }
-    });
-    _text.text = ['agora ', 'v', 'a', 'i', '!'];
-    _image = new Svg.Image({
-      attrs: {
-        'xlink:href': ((_ref = sampleImage.tag) != null ? _ref.src : void 0) || sampleImage.src,
-        x: '50%'
-      }
-    });
-    _rect = new Svg.Rect({
-      attrs: {
-        x: '50%',
-        y: '0',
-        width: '100',
-        height: '100'
-      }
-    });
-    _image.clipPath(_rect);
-    this._svg.appendChild(_image);
-    this._svg.appendChild(_text);
-    this._filter = _text.filter({
-      attrs: {
-        id: 'blur'
-      }
-    }, new Svg.Filters.GaussianBlur({
-      attrs: {
-        "in": 'SourceGraphic',
-        stdDeviation: '1'
-      }
-    }));
-    this._filterImage = _image.filter({
-      attrs: {
-        id: 'imageFilter'
-      }
-    }, new Svg.Filters.Turbulence({
-      attrs: {
-        result: 'turbulence',
-        baseFrequency: '0.05',
-        numOctaves: '2'
-      }
-    }), new Svg.Filters.DisplacementMap({
-      attrs: {
-        "in": 'SourceGraphic',
-        in2: 'turbulence',
-        scale: '50',
-        xChannelSelector: 'R',
-        yChannelSelector: 'A'
-      }
-    }));
+    this._grid.on(Grid.GRIDFRAME_CREATE, this._didFrameCreate);
+    this._grid.on(Grid.GRIDFRAME_DESTROY, this._didFrameDestroy);
+    this._grid.sourceData = {
+      items: this.gridData
+    };
     return UiComponents.__super__.createComplete.apply(this, arguments);
   };
   UiComponents.prototype.showStart = function(evt) {
@@ -5126,15 +5176,45 @@ UiComponents = (function(_super) {
     return UiComponents.__super__.hideComplete.apply(this, arguments);
   };
   UiComponents.prototype.destroy = function(evt) {
+    var _ref, _ref1, _ref2;
     if (evt == null) {
       evt = null;
     }
-    TweenMax.killTweensOf(this._background.element);
-    this._svg.destroy();
+    TweenMax.killTweensOf([(_ref = this._background) != null ? _ref.element : void 0]);
+    if ((_ref1 = this._svg) != null) {
+      _ref1.destroy();
+    }
+    delete this._svg;
     this._svg = null;
-    this._background.destroy();
+    if ((_ref2 = this._background) != null) {
+      _ref2.destroy();
+    }
+    delete this._background;
     this._background = null;
     return UiComponents.__super__.destroy.apply(this, arguments);
+  };
+  UiComponents.prototype._didFrameCreate = function(event) {
+    var frame, view;
+    if (event == null) {
+      event = null;
+    }
+    frame = event.frame;
+    if (frame != null) {
+      view = new BaseDOM;
+      view.css({
+        'background-color': '#' + Math.floor(Math.random() * 16777215).toString(16),
+        width: '100%',
+        height: '100%'
+      });
+      return frame.setView(view);
+    }
+  };
+  UiComponents.prototype._didFrameDestroy = function(event) {
+    var frame;
+    if (event == null) {
+      event = null;
+    }
+    return frame = event.frame;
   };
   return UiComponents;
 })(BaseView);

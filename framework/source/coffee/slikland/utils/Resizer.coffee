@@ -16,7 +16,7 @@ class Resizer extends EventDispatcher
 		_body = document.querySelector("body")
 		_bounds = {"top":0, "bottom":0, "left":0, "right":0}
 		if p_start? then @start()
-		
+
 	@get width:->
 		return window.innerWidth
 
@@ -44,7 +44,7 @@ class Resizer extends EventDispatcher
 	change:(evt)=>
 		evt?.preventDefault()
 		evt?.stopImmediatePropagation()
-		
+
 		_data = {
 			"width": @width,
 			"height": @height,
@@ -61,17 +61,19 @@ class Resizer extends EventDispatcher
 						if !@hasClass(k) then @addClass(k)
 					else
 						if @hasClass(k) then @removeClass(k)
-			
+
+			_changes = []
 			for k, v of app.conditions.list
 				if v['size']? || v['orientation']?
 					if app.conditions.test(k)
 						_data['breakpoint'] = {key:k, values:v}
-						if @latestKey != k
-							@latestKey = k
-							@trigger Resizer.BREAKPOINT_CHANGE, _data
-						break
+						_changes.push k
+			_hash = _changes.join('-')
+			if @latestKey != _hash
+				@latestKey = _hash
+				@trigger Resizer.BREAKPOINT_CHANGE, _data
 
-				
+
 	addClass:(className)->
 		if typeof(className) is 'string'
 			className = className.replace(/\s+/ig, ' ').split(' ')
@@ -115,4 +117,4 @@ class Resizer extends EventDispatcher
 		while i-- > 0
 			hasClass &= (classNames.indexOf(className[i]) >= 0)
 		return hasClass
-	
+

@@ -177,10 +177,7 @@ class Svg.Asset extends BaseDOM
 	setOptions:(p_options = null)->
 		if p_options?
 
-			p_options = ObjectUtils.merge(p_options, ObjectUtils.merge(@_options || {}, @constructor.DEFAULT_OPTIONS))
-
-			# Updates and save current options data
-			@_options = p_options
+			@_options = ObjectUtils.merge(p_options, @_options)
 
 			@_invalidateOptions()
 
@@ -233,7 +230,7 @@ class Svg.Symbol extends Svg.Asset
 		}, @DEFAULT_OPTIONS)
 
 	constructor:(p_options = {})->
-		p_options.element = 'symbol'
+		p_options.element = 'symbol' if !(p_options.element instanceof Element)
 		super p_options
 
 #------------------------------------
@@ -380,8 +377,11 @@ class Svg.Path extends Svg.Asset
 				"a #{radius},#{radius} 0 1,0 #{-(radius * 2)},0"
 		options.attrs ?= {}
 		options.attrs.d = d
-		@_path = new Svg.Path options
-		return @_path
+
+		if !!options.result
+			return d
+
+		return new Svg.Path options
 
 	@rect:(x=0, y=0, width=100, height=50, radius=0, options={})->
 		radius = Math.min(radius,height/2)
@@ -395,10 +395,44 @@ class Svg.Path extends Svg.Asset
 				"v #{(2 * radius - height)}" +
 				"a #{radius},#{radius} 0 0 1 #{radius},#{-radius}" +
 				"z"
+
+		if !!options.result
+			return d
+
 		options.attrs ?= {}
 		options.attrs.d = d
-		@_path = new Svg.Path options
-		return @_path
+		return new Svg.Path options
+
+	@arc:(x=0, y=0, rx=100, ry=100, startAngle, endAngle, sweepFlag = 1, options={})->
+		start = @_polarToCartesian(x, y, rx, ry, endAngle);
+		end = @_polarToCartesian(x, y, rx, ry, startAngle);
+
+		largeArcFlag = if endAngle - startAngle <= 180 then "0" else "1"
+
+		sx = Math.max(start.x, rx)
+		sy = Math.max(start.y, ry)
+		ex = Math.max(end.x, rx)
+		ey = Math.max(end.y, ry)
+
+		d = [
+			"M", x, Math.max(y, y + ry),
+			"a", rx, ry, 0, largeArcFlag, sweepFlag, end.x-start.x, end.y-start.y
+		].join(" ")
+
+		if !!options.result
+			return d
+
+		options.attrs ?= {}
+		options.attrs.d = d
+		return new Svg.Path options
+
+	@_polarToCartesian:(centerX, centerY, rx, ry, angleInDegrees)->
+		angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
+
+		return {
+			x: centerX + (rx * Math.cos(angleInRadians)),
+			y: centerY + (ry * Math.sin(angleInRadians))
+		}
 
 #------------------------------------
 
@@ -412,22 +446,6 @@ class Svg.ClipPath extends Svg.Asset
 
 	constructor:(p_options = {})->
 		p_options.element = 'clipPath'
-		super p_options
-
-#------------------------------------
-
-class Svg.TextPath extends Svg.Asset
-
-	@const DEFAULT_OPTIONS: ObjectUtils.merge({
-			attrs: {
-				startOffset: null
-				method: null
-				spacing: null
-			}
-		}, @DEFAULT_OPTIONS)
-
-	constructor:(p_options = {})->
-		p_options.element = 'textPath'
 		super p_options
 
 #------------------------------------
@@ -449,7 +467,7 @@ class Svg.Text extends Svg.Asset
 		}, @DEFAULT_OPTIONS)
 
 	constructor:(p_options = {})->
-		p_options.element = 'text' if p_options.element isnt 'tspan'
+		p_options.element = 'text' if p_options.element isnt 'tspan' and p_options.element isnt 'textPath'
 		super p_options
 
 	@get text:()->
@@ -463,6 +481,29 @@ class Svg.Text extends Svg.Asset
 			@option('attrs', {id:StringUtils.random()})
 		return Svg.createTref(@_options.attrs?.id, p_options)
 
+	textPath:(p_svgElement = null, p_textPathOptions = {})->
+		if p_svgElement instanceof Svg.Asset
+
+			if !p_svgElement.options.attrs?.id?
+				p_svgElement.option('attrs', {id:StringUtils.random()})
+
+			if !!@_currentTextPath
+				@_currentTextPath.option('attrs', {id:p_svgElement.options.attrs?.id})
+				@_currentTextPath.path = p_svgElement
+				@root?.defs.appendChild @_currentTextPath.path
+			else
+				p_textPathOptions.attrs ?= {}
+				p_textPathOptions.attrs['xlink:href'] = "##{p_svgElement.options.attrs?.id}"
+				@_currentTextPath = new Svg.TextPath p_textPathOptions
+				@appendChild @_currentTextPath
+				@_currentTextPath.path = p_svgElement
+				@root?.defs.appendChild @_currentTextPath.path
+			return @_currentTextPath
+		else if !p_svgElement? and !!@_currentTextPath
+			@_currentTextPath.destroy()
+
+		return @_currentTextPath
+
 	_invalidate:()->
 		super
 		if typeof @_options?.text is 'string' and @_options?.text isnt @element.textContent
@@ -473,12 +514,17 @@ class Svg.Text extends Svg.Asset
 				if typeof value is 'string'
 					@appendSpan ObjectUtils.merge({text:value}, @_options.tspan)
 				else
-					@appendSpan ObjectUtils.merge(ObjectUtils.merge({}, @_options.tspan), value)
+					@appendSpan ObjectUtils.merge(value, @_options.tspan)
 
 	appendSpan:(p_options = {text:''})->
 		_span = new Svg.Text.Span p_options
 		@appendChild _span
 		return _span
+
+	_added:()->
+		if @_currentTextPath? and !@_currentTextPath?.path?.isAttached
+			@root.defs.appendChild @_currentTextPath.path
+		super
 
 #------------------------------------
 
@@ -486,6 +532,22 @@ class Svg.Text.Span extends Svg.Text
 
 	constructor:(p_options = {})->
 		p_options.element = 'tspan'
+		super p_options
+
+#------------------------------------
+
+class Svg.TextPath extends Svg.Text
+
+	@const DEFAULT_OPTIONS: ObjectUtils.merge(Svg.Asset.DEFAULT_OPTIONS, {
+			attrs: {
+				startOffset: null
+				method: null
+				spacing: null
+			}
+		}, @DEFAULT_OPTIONS)
+
+	constructor:(p_options = {})->
+		p_options.element = 'textPath'
 		super p_options
 
 #------------------------------------
@@ -510,6 +572,57 @@ class Svg.Image extends Svg.Asset
 	constructor:(p_options = {})->
 		p_options.element = 'image'
 		super p_options
+
+#------------------------------------
+
+class Svg.LinearGradient extends Svg.Asset
+
+	@const DEFAULT_OPTIONS: ObjectUtils.merge({
+			attrs: {
+				gradientUnits: 'objectBoundingBox'
+				gradientTransform: null
+				x1: null
+				x2: null
+				y1: null
+				y2: null
+				spreadMethod: 'pad'
+				'xlink:href': null
+			}
+			stops: null
+		}, @DEFAULT_OPTIONS)
+
+	constructor:(p_options = {})->
+		p_options.element = 'linearGradient'
+		@_stops = []
+		@_sourceStops = null
+		super p_options
+
+	@get stops:()->
+		return @_stops
+
+	addStop:(p_stops...)->
+		if p_stops.length > 1
+			for item in p_stops
+				@addStop(item)
+		else if isPlainObject(stopObject = p_stops[0])
+			stopElement = new Svg.Asset
+				element: 'stop'
+				attrs: stopObject
+			@appendChild stopElement
+			@_stops.push stopElement
+		return @_stops
+
+	clear:()->
+		for element in @_stops
+			element.destroy()
+		@_stops.length = 0
+
+	_invalidate:()->
+		super
+		if @_options.stops? and @_sourceStops isnt @_options.stops
+			@clear()
+			@_sourceStops = @_options.stops
+			@addStop.apply(@, @_sourceStops)
 
 #------------------------------------
 

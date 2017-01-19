@@ -1,1 +1,1 @@
-html,body{font-family:Helvetica;position:relative;height:100%;margin:0;padding:0;}noselect{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+html,body{font-family:Helvetica;position:relative;min-height:100%;margin:0;padding:0;}html{height:100%}noselect{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}

@@ -9,15 +9,14 @@ class Svg extends BaseComponent
 
 	@const BASE_CLASSNAME: 'svg-graph'
 
-	@const DEFAULT_OPTIONS: ObjectUtils.merge({
-			className: @BASE_CLASSNAME
-			element: 'svg'
-			attrs: {
-				width: 100
-				height: 100
-			}
-			autoViewBox: false
-		}, @DEFAULT_OPTIONS)
+	@const DEFAULT_OPTIONS:
+		className: @BASE_CLASSNAME
+		element: 'svg'
+		attrs: {
+			width: 100
+			height: 100
+		}
+		autoViewBox: false
 
 	@const SVG_URL_ATTRS: ['fill|url', 'mask|url', 'clip-path|url', 'filter|url', 'xlink\\:href|#']
 

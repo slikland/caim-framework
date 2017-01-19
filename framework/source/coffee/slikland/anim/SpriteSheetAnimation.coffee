@@ -45,33 +45,19 @@ class SpriteSheetAnimation extends BaseAnimation
 	sprithesheet.play({repeat: false});
 	```
 	###
-	constructor:(data)->
-		if !data.image?
-			throw new Error('data.image is not set')
-		if !(data.json)
-			throw new Error('data.json is not set')
-		image = data.image.tag || data.image
-		json = data.json.tag || data.json
+	constructor:(p_data = null, p_fps = 15)->
+		super p_fps
 
-		if !(image instanceof Image || image.tagName?.toLowerCase() == 'img')
-			throw new Error('data.image is not Type of Image')
-
-		super
 		@addClass('spritesheet')
-		
-		@_useBackground = data.background || false
-		@_frames = @_parseJson(json)
-		@_totalFrames = @_frames.length
 
-		@_holder = new BaseDOM({element: 'div'})
-		@_holder.css({
+		@_useBackground = false
+
+		@_holder = new BaseDOM
+		@_holder.css
 			display: 'inline-block'
-			width: @_size.w + 'px'
-			height: @_size.h + 'px'
-		})
 		@appendChild(@_holder)
 
-		@_container = new BaseDOM({element: 'div'})
+		@_container = new BaseDOM
 		@_container.css({
 			display: 'inline-block'
 			position: 'absolute'
@@ -79,12 +65,38 @@ class SpriteSheetAnimation extends BaseAnimation
 		})
 		@appendChild(@_container)
 
+		@data = p_data if p_data?
+
+	@get data:()->
+		return @_data
+
+	@set data:(p_value = null)->
+		@_data = ObjectUtils.merge(p_value, @_data)
+		if !@_data.image?
+			throw new Error('data.image is not set')
+		if !@_data.json
+			throw new Error('data.json is not set')
+		image = @_data.image.tag || @_data.image
+		json = @_data.json.tag || @_data.json
+
+		if !(image instanceof Image || image?.tagName?.toLowerCase() == 'img')
+			throw new Error('data.image is not Type of Image')
+
+		@_useBackground = @_data.background || false
+		@_frames = @_parseJson(json)
+		@_totalFrames = @_frames.length
+
+		@_holder.css
+			width: @_size.w + 'px'
+			height: @_size.h + 'px'
+
 		if @_useBackground
 			@_setupBackground(image)
 			@_redraw = @_redrawBackground
 		else
 			@_setupImage(image)
 			@_redraw = @_redrawImage
+
 
 	_parseJson:(data)->
 		frames = []
@@ -122,16 +134,19 @@ class SpriteSheetAnimation extends BaseAnimation
 		return frames
 
 	_setupImage:(image)->
-		@_image = image.cloneNode()
+		@_image = image.cloneNode(true)
 		@_image.style.position = 'absolute'
 		@_image.style.display = 'inline-block'
 		@_image.style.width = (@_imageSize.w / @_size.w) * 100 + '%'
 		@_image.style.height = (@_imageSize.h / @_size.h) * 100 + '%'
+		@_container.removeAll(true)
 		@_container.appendChild(@_image)
+
 	_setupBackground:(image)->
 		@_container.css({
 			'background-image': 'url(' + image.src + ')'
 		})
+		@_container.removeAll(true)
 
 	_redrawImage:()=>
 		fd = @_frames[@_currentFrame]

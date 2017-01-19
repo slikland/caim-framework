@@ -31,7 +31,6 @@ class ImageView extends BaseComponent
 
 	@const FIT_PARAMS: 'none auto exact cover contain origin'
 
-	@const STYLE: ".image-view {position: relative;display: inline-block;width: 200px;height: 200px;overflow: hidden;margin: 0;}.image-view .image-loading {position: absolute;left: 0;right: 0;top: 50%;width: 40%;margin: 0 auto;transform: translateY(-50%) perspective(1px);max-width: 50px;max-height: 50px;opacity: 0;}.small_up .image-view .image-loading {max-width: 100px;max-height: 100px;}.image-view .image-loading:after {content: '';display: block;padding-bottom: 100%;}.image-view .image {position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto;pointer-events: none;}.image-view img.image {max-height: 100%;max-width: 100%;}.image-view img.image.left {left: 0 !important;right: auto;}.image-view img.image.right {right: 0 !important;left: auto;}.image-view img.image.top {top: 0 !important;bottom: auto;}.image-view img.image.bottom {bottom: 0 !important;top: auto;}.image-view img.image.cover.wh, .image-view img.image.cover.sq {width: auto;height: 100%;min-width: 100%;max-width: none;max-height: 100%;}.image-view img.image.cover.hw {height: auto;width: 100%;min-height: 100%;max-height: none;max-width: 100%;}.image-view img.image.cover.center {left: 50%;transform: translateX(-50%) perspective(1px);}.image-view img.image.contain {max-height: 100%;max-width: 100%;}.image-view img.image.contain.wh, .image-view img.image.contain.sq {min-width: 100%;}.image-view img.image.contain.hw {min-height: 100%;}.image-view img.image.exact {width: 100%;height: 100%;}.image-view div.image {width: 100%;height: 100%;background-repeat: no-repeat;background-size: auto auto;}.image-view div.image.center {background-position: center center;}.image-view div.image.center.left {background-position: left center;}.image-view div.image.center.right {background-position: right center;}.image-view div.image.top {background-position: center top;}.image-view div.image.top.left {background-position: left top;}.image-view div.image.top.right {background-position: right top;}.image-view div.image.bottom {background-position: center bottom;}.image-view div.image.bottom.left {background-position: left bottom;}.image-view div.image.bottom.right {background-position: right bottom;}.image-view div.image.left {right: auto;}.image-view div.image.right {left: auto;}.image-view div.image.top {bottom: auto;}.image-view div.image.bottom {top: auto;}.image-view div.image.none {background-size: auto auto;}.image-view div.image.auto {background-size: auto auto !important;}.image-view div.image.exact {background-size: 100% 100% !important;}.image-view div.image.contain {background-size: contain !important;}.image-view div.image.cover {background-size: cover !important;}.image-view .loader {position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: 0 auto;opacity: 0.3;font-size: 10px;text-indent: -9999em;border-radius: 50%;border-top: 1.1em solid rgba(255,255,255,0.2);border-right: 1.1em solid rgba(255,255,255,0.2);border-bottom: 1.1em solid rgba(255,255,255,0.2);border-left: 1.1em solid #fff;transform: translateZ(0) translateY(-50%) perspective(1px);animation: loading 1.1s infinite linear;}@-moz-keyframes loading {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}@-webkit-keyframes loading {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}@-o-keyframes loading {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}@keyframes loading {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}"
 
 	constructor:(p_options = {})->
 		@_loaded = false
@@ -216,10 +215,10 @@ class ImageView extends BaseComponent
 				image.onload = ()=>
 					image.onload = null
 					@_invalidateImage(image)
+					@trigger ImageView.LOADED, {item:{tag:image}}
 				return
 			else
 				setTimeout ()=>
-					@removeChild @_loading if @_loading.isAttached
 					@trigger ImageView.LOADED, {item:{tag:image}}
 
 			if @_imageElement?
@@ -282,6 +281,7 @@ class ImageView extends BaseComponent
 		validations = ConditionsValidation.getInstance();
 		for item in p_src
 			if item.condition?
+				console.log item.condition, validations.test(item.condition)
 				return item if validations.test(item.condition)
 				continue
 			else
@@ -306,6 +306,7 @@ class ImageView extends BaseComponent
 					opacity: 0,
 					ease: Quad.easeOut,
 					onComplete: ()=>
+						@removeChild @_loading if @_loading.isAttached
 						_image = item.tag.cloneNode(true)
 						@_invalidateImage(_image)
 				})

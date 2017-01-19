@@ -14,6 +14,9 @@ class BaseDisplay extends BaseComponent
 	constructor:(p_options = {})->
 		super p_options
 
+	createStart:()->
+		@create()
+
 	showStart:(evt=null)=>
 		@trigger(BaseDisplay.SHOW_START, @)
 		@show()

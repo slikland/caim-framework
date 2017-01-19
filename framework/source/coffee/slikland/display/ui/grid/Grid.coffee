@@ -7,18 +7,18 @@
 
 class Grid extends BaseComponent
 
-	@const DEFAULT_MAX_COLUMNS: 	10
-	@const DEFAULT_MIN_COLUMNS: 	2
-	@const DEFAULT_FLEX_COLUMNS:
-		min: 320
-		max: 1440
+	@const BASE_CLASSNAME: 'grid'
 
 	@const GRIDFRAME_CREATE: 	'grid_gridframe_create'
 	@const GRIDFRAME_DESTROY: 'grid_gridframe_destroy'
 	@const GRIDFRAME_SHOW: 		'grid_gridframe_show'
 	@const GRIDFRAME_HIDE: 		'grid_gridframe_hide'
 
-	@const BASE_CLASSNAME: 'grid'
+	@const DEFAULT_MAX_COLUMNS: 	10
+	@const DEFAULT_MIN_COLUMNS: 	2
+	@const DEFAULT_FLEX_COLUMNS:
+		min: 320
+		max: 1440
 
 	@const DEFAULT_OPTIONS: ObjectUtils.merge({
 			className: @BASE_CLASSNAME
@@ -40,7 +40,8 @@ class Grid extends BaseComponent
 		p_options.element = 'section'
 		super(p_options)
 
-		@_resize = FunctionUtils.throttle(@_resize, 200)
+		@_resizeThrottle = FunctionUtils.throttle(@_resize, 200)
+		@create()
 
 	#
 	# Getters, Setters
@@ -50,13 +51,15 @@ class Grid extends BaseComponent
 		return @_maxColumns
 
 	@set maxColumns:(p_value)->
-		@option('maxColumns', p_value)
+		@_maxColumns = p_value
+		@layout()
 
 	@get minColumns:()->
 		return @_minColumns
 
 	@set minColumns:(p_value)->
-		@option('minColumns', p_value)
+		@_minColumns = p_value
+		@layout()
 
 	@get currentColumns:()->
 		return @_currentColumns
@@ -88,6 +91,24 @@ class Grid extends BaseComponent
 	#   maxColumns:Number
 	#   minColumns:Number
 	# }
+	#
+	@set sourceData:(p_data=null)->
+		@reset()
+		if p_data?
+			@_sourceData = p_data
+
+			@maxColumns = @_sourceData.maxColumns || @constructor.DEFAULT_MAX_COLUMNS
+			@minColumns = @_sourceData.minColumns || @constructor.DEFAULT_MIN_COLUMNS
+			@_currentColumns = @maxColumns
+
+			@_flexMin = @_sourceData.flexColumns?.min || @constructor.DEFAULT_FLEX_COLUMNS.min
+			@_flexMax = @_sourceData.flexColumns?.max || @constructor.DEFAULT_FLEX_COLUMNS.max
+
+			@_updateColumns()
+			@items = p_data.items || []
+
+	@get sourceData:()->
+		return @_sourceData
 
 	@get filler:()->
 		return @_fillerItems
@@ -106,7 +127,7 @@ class Grid extends BaseComponent
 						break
 				if _itemData?
 					item.data = _itemData
-					@trigger Grid.GRIDFRAME_CREATE, {frame: item}
+					@trigger @constructor.GRIDFRAME_CREATE, {frame: item}
 
 
 	@get items:()->
@@ -129,7 +150,7 @@ class Grid extends BaseComponent
 						_frame = @_childs.splice(removeIndex, 1)[0]
 						if _frame?
 							_frame.destroy?()
-							@trigger Grid.GRIDFRAME_DESTROY, {frame:_frame}
+							@trigger @constructor.GRIDFRAME_DESTROY, {frame:_frame}
 
 			Array.prototype.push.apply(@_dataItems, p_items)
 
@@ -161,14 +182,14 @@ class Grid extends BaseComponent
 
 	createComplete:()->
 		@_resize()
-		Resizer.getInstance().on Resizer.RESIZE, @_resize
+		Resizer.getInstance().on Resizer.RESIZE, @_resizeThrottle
 		window.addEventListener 'scroll', @_didScroll
 
 		@_invalidateOptions()
 		@trigger(@constructor.CREATE)
 
 	destroy:()->
-		Resizer.getInstance().off Resizer.RESIZE, @_resize
+		Resizer.getInstance().off Resizer.RESIZE, @_resizeThrottle
 		@reset()
 		@_initialized = false
 		@_firstRender = false
@@ -176,20 +197,6 @@ class Grid extends BaseComponent
 		delete @_packer
 		@_packer = null
 		super
-
-	_invalidate:()->
-		super
-
-		@_maxColumns = @_options.maxColumns || Grid.DEFAULT_MAX_COLUMNS
-		@_minColumns = @_options.minColumns || Grid.DEFAULT_MIN_COLUMNS
-		@_currentColumns = @_maxColumns
-
-		@_flexMin = @_options.flexColumns?.min || Grid.DEFAULT_FLEX_COLUMNS.min
-		@_flexMax = @_options.flexColumns?.max || Grid.DEFAULT_FLEX_COLUMNS.max
-
-		@_updateColumns()
-		@items = @_options.items || []
-
 
 	#
 	# Layout Methods
@@ -285,7 +292,7 @@ class Grid extends BaseComponent
 					position: 'absolute'
 					# left: (if randomState is 0 then window.innerWidth + spaceX else -spaceX) + 'px'
 					# top: (if randomState is 1 then window.innerHeight + spaceY else -spaceY) + 'px'
-				@trigger Grid.GRIDFRAME_CREATE, {frame: frame}
+				@trigger @constructor.GRIDFRAME_CREATE, {frame: frame}
 
 	## Update children items and invalidate their sizes to respect the new current max columns
 	_updateChildren:(cellSize)->
@@ -303,7 +310,7 @@ class Grid extends BaseComponent
 				frame.size =
 					row: @_minColumns
 					col: @_minColumns
-			blocks.unshift({w: cellSize * frame.size.col, h: cellSize * frame.size.row, frame:frame, type:frame.data.type })
+			blocks.unshift({w: cellSize * frame.size.col, h: cellSize * frame.size.row, frame:frame, type:frame.data?.type })
 
 		if !isNaN(cellSize)
 			@_gridPacker(blocks, cellSize)
@@ -313,7 +320,7 @@ class Grid extends BaseComponent
 		while (_fillers--)
 			frame = @_fillerBlocks[_fillers]
 			frame.destroy?()
-			@trigger Grid.GRIDFRAME_DESTROY, {frame: frame}
+			@trigger @constructor.GRIDFRAME_DESTROY, {frame: frame}
 		@_fillerBlocks.length = 0
 
 	_checkViewport:()->
@@ -425,6 +432,7 @@ class Grid extends BaseComponent
 
 		@_fillingCount = blocks.length
 		@_fillingBlockNodes = []
+		@_fillerStateItems = ArrayUtils.shuffle(@_fillerItems)
 
 		for k, cell of blocks
 			if cell.fit
@@ -588,17 +596,18 @@ class Grid extends BaseComponent
 
 			updatedData = false
 
-			if Array.isArray(@_fillerItems) and @_fillerItems.length > 0 and !block.data.type?
-				_itemData = null
-				_copyItems = ArrayUtils.shuffle(@_fillerItems)
-				for k, fillerData of _copyItems
-					if block.data.size.row is fillerData.size.row and block.data.size.col is fillerData.size.col
-						_itemData = _copyItems.splice(k, 1)[0]
-						_copyItems.push(_itemData)
-						break
-				if _itemData?
-					block.data = _itemData
-					updatedData = true
+			if Array.isArray(@_fillerStateItems) and !block.data.type?
+        _itemData = null
+        for k, fillerData of @_fillerStateItems
+          # if block.data.size.row is fillerData.size.row and block.data.size.col is fillerData.size.col
+          fillerData.size.row = block.data.size.row
+          fillerData.size.col = block.data.size.col
+          _itemData = @_fillerStateItems.splice(k, 1)[0]
+          @_fillerStateItems.push(_itemData)
+          break
+        if _itemData?
+          block.data = _itemData
+          updatedData = true
 
 			frame = new GridFrame(block.data, @_childClassName)
 			frame.addClass('fill-block')
@@ -609,7 +618,7 @@ class Grid extends BaseComponent
 
 			@_wrapper.appendChild frame
 			@_fillerBlocks.push frame
-			@trigger Grid.GRIDFRAME_CREATE, {frame: frame, fillBlock:block}
+			@trigger @constructor.GRIDFRAME_CREATE, {frame: frame, fillBlock:block}
 
 			_coords = @_getCoords(block.fit)
 
@@ -642,7 +651,6 @@ class Grid extends BaseComponent
 		}
 
 	_isARelativeProp:(styleProp, el=null)->
-		_matches = @_getMatchesCss(el)
 		_found = false
 		_relMetrics = ['vh','vw','vmin','vmax','%'];
 
@@ -658,6 +666,7 @@ class Grid extends BaseComponent
 				return 'auto' if m[0] is 'auto'
 				_found = _relMetrics.indexOf(m[3]) > -1
 		else
+			_matches = @_getMatchesCss(el)
 			for match in _matches
 				re = new RegExp("#{styleProp}\:\\s?(([\\d]{1,})+([\\w,\\%]{1,2})|auto)", "i")
 				m = undefined

@@ -2,6 +2,8 @@
 
 class GridFrame extends BaseComponent
 
+	@const BASE_CLASSNAME: 'grid-frame'
+
 	@const DEFAULT_SIZE:
 		col: 1
 		row: 1
@@ -87,7 +89,7 @@ class GridFrame extends BaseComponent
 		@_view = null
 
 	requestLoad:()->
-		@_view?.requestLoad()
+		@_view?.requestLoad?()
 
 	destroy:()->
 		@clearView()

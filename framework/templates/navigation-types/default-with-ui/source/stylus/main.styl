@@ -1,9 +1,12 @@
+@import 'mixins'
+@import 'grid'
 global-reset()
 
 .nav-container
 	font-family Helvetica
 	position relative
-	height 100%
+	min-height 100%
+	height auto
 	margin 0
 	padding 0
 	text-align center
@@ -30,4 +33,5 @@ global-reset()
 		display table-cell
 		vertical-align middle
 
-add-font(Helvetica, Helvetica, normal, 300)
+.section
+	height 100%

@@ -6,14 +6,14 @@ class NavItem extends BaseComponent
 	@const OVER: 'navitem-over'
 	@const OUT: 'navitem-out'
 
-	@const BASE_CLASSNAME: 'nav-item'
+	@const BASE_CLASSNAME: 'nav-list__item'
 
 	@const DEFAULT_OPTIONS: ObjectUtils.merge({
 		className: @BASE_CLASSNAME
 		element: 'li'
 		text: null
 		button: {
-			element: 'button'
+			element: 'a'
 			className: ''
 			attrs: {
 				href: null
@@ -24,6 +24,7 @@ class NavItem extends BaseComponent
 	constructor:(p_options = null)->
 		@_selected = false
 		super p_options
+		@create()
 
 	# Public
 	#------------------------------------------
@@ -34,18 +35,20 @@ class NavItem extends BaseComponent
 	@get text:()->
 		return @_options.text
 
-	componentLayout:()->
+	@get button:()->
+		return @_button
 
-		@_button = new BaseDOM
-			element: @_options.button.element
-			className: "#{@_options.button.className} #{@constructor.BASE_CLASSNAME}-button"
-		@_button.attr @_options.button.attrs
+	componentLayout:()->
+		@_options.button ?= {}
+		@_options.button._className = @_options.button.className
+		@_options.button.className = "#{@constructor.BASE_CLASSNAME}-button #{@_options.button._className}"
+		@_button = new Button @_options.button
 		@appendChild @_button
 
-		@_button.element.on 'click', @click
+		@_button.on Button.BUTTON_CLICK, @click
 		if app.detections.desktop
-			@_button.element.on 'mouseenter', @over
-			@_button.element.on 'mouseleave', @out
+			@_button.on Button.BUTTON_OVER, @over
+			@_button.on Button.BUTTON_OUT, @out
 
 	select:()=>
 		@over()
@@ -56,9 +59,7 @@ class NavItem extends BaseComponent
 		@out()
 
 	destroy:()->
-		@_button?.element.off 'click', @click
-		@_button?.element.off 'mouseenter', @over
-		@_button?.element.off 'mouseleave', @out
+		@_button?.off()
 		@_button?.destroy()
 		super
 
@@ -70,7 +71,7 @@ class NavItem extends BaseComponent
 		@_invalidateButton()
 
 	_invalidateButton:()->
-		@_button?.html = @_options.text
+		@_button?.option?('label', @_options.text)
 
 	click:(event=null)=>
 		@trigger @constructor.CLICK, event

@@ -52,26 +52,26 @@ class BaseAnimation extends BaseDOM
 	###
 	@UPDATE: 'animation_update'
 
-	_repeat: false
-	_fps: 15
-
-	#Inverted FPS value
-	_iFps: 0
-
-	_currentTime: 0
-	_totalTime: 0
-	_durationTime: 0
-	_currentFrame: 0
-	_totalFrames: 0
-	_durationFrames: 0
-	_currentLabel: null
-	_animData: null
-	_currentAnimData: null
-	_labels: []
-
-	constructor:()->
+	constructor:(p_fps = 15)->
 		if @constructor.name == 'BaseAnimation'
 			throw new Error('Please extend me.')
+
+		@_fps = p_fps
+		#Inverted FPS value
+		@_iFps = 0
+
+		@_currentTime = 0
+		@_totalTime = 0
+		@_durationTime = 0
+		@_currentFrame = 0
+		@_totalFrames = 0
+		@_durationFrames = 0
+		@_currentLabel = null
+		@_animData = null
+		@_currentAnimData = null
+		@_labels = []
+		@_paused = true
+		@_repeat = false
 		super({element: 'div', className: 'animation'})
 
 	###*
@@ -106,7 +106,7 @@ class BaseAnimation extends BaseDOM
 	@attribute fps
 	@type Number
 	###
-	
+
 	@get fps:()->
 		return @_fps
 	@set fps:(value)->
@@ -119,7 +119,7 @@ class BaseAnimation extends BaseDOM
 	###*
 	Current time of the animation in seconds.
 	If it's playing a specific label, it refers to the portion of the label.
-	
+
 	@attribute currentTime
 	@type Number
 	###
@@ -134,7 +134,7 @@ class BaseAnimation extends BaseDOM
 	###*
 	Total time of the animation in seconds.
 	If it's playing a specific label, it refers to the portion of the label.
-	
+
 	@attribute totalTime
 	@type Number
 	@readOnly
@@ -145,11 +145,11 @@ class BaseAnimation extends BaseDOM
 	###*
 	Current frame number of the animation.
 	If it's playing a specific label, it refers to the portion of the label.
-	
+
 	@attribute currentFrame
 	@type Number
 	###
-	
+
 	@get currentFrame:()->
 		return @_currentFrame
 	@set currentFrame:(value)->
@@ -161,34 +161,34 @@ class BaseAnimation extends BaseDOM
 	###*
 	Duration in frames of the animation.
 	If it's playing a specific label, it refers to the portion of the label.
-	
+
 	@attribute durationFrames
 	@type Number
 	@readOnly
 	###
-	
+
 	@get durationFrames:()->
 		return @_durationFrames
 
 	###*
 	Total number of frames of the animation.
-	
+
 	@attribute totalFrames
 	@type Number
 	@readOnly
 	###
-	
+
 	@get totalFrames:()->
 		return @_totalFrames
 
 	###*
 	The name of label currently playing.
-	
+
 	@attribute currentLabel
 	@type String
 	@readOnly
 	###
-	
+
 	@get currentLabel:()->
 		return @_currentLabel
 
@@ -196,7 +196,7 @@ class BaseAnimation extends BaseDOM
 		if !value
 			return
 		clearTimeout(@_dirtyTimeout)
-		@_dirtyTimeout = setTimeout(@_redraw, 0)
+		@_dirtyTimeout = setTimeout(@_redraw, 0) if !@_paused
 
 	@set _labelsDirty:(value)->
 		if !value
@@ -213,7 +213,7 @@ class BaseAnimation extends BaseDOM
 	###
 	addLabel:(name, start, end = null)->
 		@removeLabel(name)
-		@_labels.push({name: name, start: start, end: end})
+		@_labels.push({name: name, start: start, end: end })
 		@_labelsDirty = true
 
 	###*
@@ -271,10 +271,14 @@ class BaseAnimation extends BaseDOM
 		@_animData = @_getLabelData(data.label)
 		@_durationFrames = @_animData.duration
 		@_durationTime = @_durationFrames * @_iFps
-		@_currentFrame = 0
-		@_currentTime = 0
+		@_currentFrame = @_animData.start
+		@_currentTime = @_currentFrame * @_iFps
 		AnimationTicker.add(@_update, {fps: @_fps, delay: data.delay || 0})
 		@trigger(@constructor.PLAY)
+		return {
+			data: @_animData
+			totalTime: @_durationTime
+		}
 
 	###*
 	Resume the animation. If the {{#crossLink "BaseAnimation/play:method"}}{{/crossLink}} method was called with a label, it will resume the portion of the specified label
@@ -339,7 +343,7 @@ class BaseAnimation extends BaseDOM
 				@stop()
 				f = @_durationFrames - 1
 
-		@_currentFrame = ((f % @_durationFrames) + @_durationFrames) % @_durationFrames
+		@_currentFrame = @_animData.start + ((f % @_durationFrames) + @_durationFrames) % @_durationFrames
 		@_currentTime = @_currentFrame * @_iFps
 		@_dirty = true
 

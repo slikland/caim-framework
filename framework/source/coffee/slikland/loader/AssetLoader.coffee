@@ -104,7 +104,6 @@ class AssetLoader extends EventDispatcher
 			#
 			# When it's a video please set 'false' on the xhr param to get progress and load file
 			#
-
 			if mp4RE.test(obj.src)
 				obj['type'] = 'video'
 

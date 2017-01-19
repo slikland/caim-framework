@@ -76,6 +76,8 @@ class AnimationTicker
 		i = -1
 		while ++i < l
 			item = items[i]
+			if !item?
+				continue
 			data = item.data
 			dt = t - data.initTime - data.delayMs
 			if dt <= 0

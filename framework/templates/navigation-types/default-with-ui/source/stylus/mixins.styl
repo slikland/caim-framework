@@ -1,0 +1,61 @@
+// General
+//---------------------------------------------
+noselect()
+	-webkit-touch-callout none
+	-webkit-user-select none
+	-khtml-user-select none
+	-moz-user-select none
+	-ms-user-select none
+	user-select none
+
+// Responsive
+//---------------------------------------------
+
+convert-by-bp(bp, value, ext = vw)
+	if ext == vh
+		return (value / $breaks[bp] * 100) vh
+	else
+		return (value / $breaks[bp] * 100) vw
+
+measure-em(p_pixelsValue, p_fontSize = $baseFontSize)
+	unit((p_pixelsValue / p_fontSize), em)
+
+// Fonts
+//---------------------------------------------
+add-font(p_family, p_file-name, p_style = normal, p_weight = normal, p_path = '../fonts/')
+	@font-face
+		font-family p_family
+		src url(p_path+p_file-name+'.eot'),
+			url(p_path+p_file-name+'.eot?#iefix') format('embedded-opentype'),
+			url(p_path+p_file-name+'.woff') format('woff'),
+			url(p_path+p_file-name+'.ttf') format('truetype'),
+			url(p_path+p_file-name+'.svg#0e367a30b984427caad4ff30c417ba64') format('svg');
+		font-weight p_weight
+		font-style p_style
+
+set-font-size(p_size)
+	font-size p_size
+	-webkit-text-size-adjust p_size
+	-ms-text-size-adjust p_size
+
+font-alias-fix(p_weight)
+	text-shadow 0 -1px 1px rgba(255, 255, 255, 0.01)
+	text-rendering optimizeLegibility;
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+	font-weight p_weight !important
+
+normal-techno-font(p_size = null, p_weight = 400)
+	font-family Techno
+	font-style normal
+	font-alias-fix(p_weight)
+	if p_size is not null
+		set-font-size(p_size)
+
+normal-gtpressura-font(p_size = null, p_weight = 400)
+	font-family GTPressura
+	font-style normal
+	font-alias-fix(p_weight)
+	if p_size is not null
+		set-font-size(p_size)
+
