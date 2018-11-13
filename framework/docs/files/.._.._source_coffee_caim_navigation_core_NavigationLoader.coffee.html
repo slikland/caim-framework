@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>../../source/coffee/caim/navigation/core/NavigationLoader.coffee - Caim Framework</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="http://slikland.com/media/images/logo_docs.png" title="Caim Framework"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 3.3.2</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/_.html">_</a></li>
+                                <li><a href="../classes/AnimationTicker.html">AnimationTicker</a></li>
+                                <li><a href="../classes/API.html">API</a></li>
+                                <li><a href="../classes/App.html">App</a></li>
+                                <li><a href="../classes/ArrayUtils.html">ArrayUtils</a></li>
+                                <li><a href="../classes/AssetLoader.html">AssetLoader</a></li>
+                                <li><a href="../classes/BaseAnimation.html">BaseAnimation</a></li>
+                                <li><a href="../classes/BaseDOM.html">BaseDOM</a></li>
+                                <li><a href="../classes/BaseNavigationController.html">BaseNavigationController</a></li>
+                                <li><a href="../classes/BaseView.html">BaseView</a></li>
+                                <li><a href="../classes/Caim.html">Caim</a></li>
+                                <li><a href="../classes/ColorUtils.html">ColorUtils</a></li>
+                                <li><a href="../classes/ConditionsValidation.html">ConditionsValidation</a></li>
+                                <li><a href="../classes/CookiesManager.html">CookiesManager</a></li>
+                                <li><a href="../classes/DataStorageManager.html">DataStorageManager</a></li>
+                                <li><a href="../classes/Debug.html">Debug</a></li>
+                                <li><a href="../classes/DefaultNavigationController.html">DefaultNavigationController</a></li>
+                                <li><a href="../classes/Detections.html">Detections</a></li>
+                                <li><a href="../classes/DOMUtils.html">DOMUtils</a></li>
+                                <li><a href="../classes/EventDispatcher.html">EventDispatcher</a></li>
+                                <li><a href="../classes/FunctionUtils.html">FunctionUtils</a></li>
+                                <li><a href="../classes/GeolocationDetection.html">GeolocationDetection</a></li>
+                                <li><a href="../classes/GestureUtils.html">GestureUtils</a></li>
+                                <li><a href="../classes/GoogleAnalytics.html">GoogleAnalytics</a></li>
+                                <li><a href="../classes/GTM.html">GTM</a></li>
+                                <li><a href="../classes/IndexedDB.html">IndexedDB</a></li>
+                                <li><a href="../classes/JSONUtils.html">JSONUtils</a></li>
+                                <li><a href="../classes/KTween.html">KTween</a></li>
+                                <li><a href="../classes/MathUtils.html">MathUtils</a></li>
+                                <li><a href="../classes/MediaDOM.html">MediaDOM</a></li>
+                                <li><a href="../classes/MetaController.html">MetaController</a></li>
+                                <li><a href="../classes/MouseUtils.html">MouseUtils</a></li>
+                                <li><a href="../classes/MovieTrackingParser.html">MovieTrackingParser</a></li>
+                                <li><a href="../classes/Navigation.html">Navigation</a></li>
+                                <li><a href="../classes/NavigationContainer.html">NavigationContainer</a></li>
+                                <li><a href="../classes/NavigationLoader.html">NavigationLoader</a></li>
+                                <li><a href="../classes/NavigationRouter.html">NavigationRouter</a></li>
+                                <li><a href="../classes/NumberUtils.html">NumberUtils</a></li>
+                                <li><a href="../classes/ObjectUtils.html">ObjectUtils</a></li>
+                                <li><a href="../classes/PreloadFiles.html">PreloadFiles</a></li>
+                                <li><a href="../classes/Resizer.html">Resizer</a></li>
+                                <li><a href="../classes/ResizeUtils.html">ResizeUtils</a></li>
+                                <li><a href="../classes/ScrollNavigationController.html">ScrollNavigationController</a></li>
+                                <li><a href="../classes/ScrollUtils.html">ScrollUtils</a></li>
+                                <li><a href="../classes/ShareUtils.html">ShareUtils</a></li>
+                                <li><a href="../classes/Shortcut.html">Shortcut</a></li>
+                                <li><a href="../classes/SplitTextUtils.html">SplitTextUtils</a></li>
+                                <li><a href="../classes/SpriteSheetAnimation.html">SpriteSheetAnimation</a></li>
+                                <li><a href="../classes/SRTParser.html">SRTParser</a></li>
+                                <li><a href="../classes/StringUtils.html">StringUtils</a></li>
+                                <li><a href="../classes/SunUtils.html">SunUtils</a></li>
+                                <li><a href="../classes/Tracking.html">Tracking</a></li>
+                                <li><a href="../classes/URLUtils.html">URLUtils</a></li>
+                                <li><a href="../classes/VideoCanvas.html">VideoCanvas</a></li>
+                                <li><a href="../classes/VideoSubtitle.html">VideoSubtitle</a></li>
+                                <li><a href="../classes/ViewsData.html">ViewsData</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/caim.html">caim</a></li>
+                                <li><a href="../modules/caim.anim.html">caim.anim</a></li>
+                                <li><a href="../modules/caim.data.html">caim.data</a></li>
+                                <li><a href="../modules/caim.debug.html">caim.debug</a></li>
+                                <li><a href="../modules/caim.event.html">caim.event</a></li>
+                                <li><a href="../modules/caim.loader.html">caim.loader</a></li>
+                                <li><a href="../modules/caim.media.html">caim.media</a></li>
+                                <li><a href="../modules/caim.media.subtitles.html">caim.media.subtitles</a></li>
+                                <li><a href="../modules/caim.media.tracking.html">caim.media.tracking</a></li>
+                                <li><a href="../modules/caim.media.video.html">caim.media.video</a></li>
+                                <li><a href="../modules/caim.navigation.core.html">caim.navigation.core</a></li>
+                                <li><a href="../modules/caim.navigation.display.html">caim.navigation.display</a></li>
+                                <li><a href="../modules/caim.navigation.types.html">caim.navigation.types</a></li>
+                                <li><a href="../modules/caim.net.html">caim.net</a></li>
+                                <li><a href="../modules/caim.tracking.html">caim.tracking</a></li>
+                                <li><a href="../modules/caim.utils.html">caim.utils</a></li>
+                                <li><a href="../modules/caim.utils.keyboard.html">caim.utils.keyboard</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: ../../source/coffee/caim/navigation/core/NavigationLoader.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+#import caim.event.EventDispatcher
+
+#import caim.utils.ObjectUtils
+#import caim.utils.JSONUtils
+#import caim.loader.AssetLoader
+
+#import caim.navigation.core.data.LanguageData
+#import caim.navigation.core.data.PathsData
+#import caim.navigation.core.data.ParseConfig
+#import caim.navigation.core.data.ParseContent
+
+###*
+Base class to setup the configuration file and start loading of dependencies.
+@class NavigationLoader
+@extends EventDispatcher
+###
+class NavigationLoader extends EventDispatcher
+
+	@const PREPARSER_DATA : &quot;pre_parser_data&quot;
+	@const LANGUAGE_DATA_LOADED : &quot;language_data_loaded&quot;
+	@const CONFIG_LOADED : &quot;config_loaded&quot;
+	@const GROUP_ASSETS_LOADED : &quot;group_assets_loaded&quot;
+
+	@const LOAD_START : &quot;load_start&quot;
+	@const LOAD_PROGRESS : &quot;load_progress&quot;
+	@const LOAD_COMPLETE : &quot;load_complete&quot;
+	@const LOAD_FILE_COMPLETE : &quot;load_file_complete&quot;
+
+	paths = null
+	config = null
+	lang = null
+	totalContentsLoaded = null
+	
+	loaderStep = 0
+	loaderRatio = 0
+	loaderSteps = null
+	currentStep = null
+
+	###*
+	@class NavigationLoader
+	@constructor
+	@param {String} p_configPath Path of the navigation configuration file.
+	###
+	constructor:(p_configPath)-&gt;
+		if !p_configPath then throw new Error(&#x27;The param p_configPath is null&#x27;)
+
+		queue = @loader.getGroup(&#x27;config&#x27;)
+		queue.on(AssetLoader.COMPLETE_FILE, @configLoaded)
+		queue.loadFile 
+			id: &#x27;config&#x27;,
+			cache: true,
+			src: p_configPath
+		false
+	
+	###*
+	@method loader
+	@return {AssetLoader}
+	@protected
+	###
+	@get loader:()-&gt;
+		return AssetLoader.getInstance()
+
+	###*
+	@method loaded
+	@return {Boolean}
+	@protected
+	###
+	@get loaded:()-&gt;
+		return @_loaded
+
+	###*
+	@method configLoaded
+	@param {Event} evt
+	@private
+	###
+	configLoaded:(evt)=&gt;
+		evt?.currentTarget?.off(AssetLoader.COMPLETE_FILE, @configLoaded)
+		data = evt.result
+
+		if data.languages?
+			@selectLanguage(data)
+		else
+			@parseConfig(data)
+		false
+
+	###*
+	@method selectLanguage
+	@param {Object} p_data
+	@private
+	###
+	selectLanguage:(p_data)=&gt;
+		languages = LanguageData.getInstance(p_data.languages)
+		parts = document.location.href.split(&#x27;/&#x27;)
+		i = parts.length
+		while i--
+			part = parts[i]
+			if languages.hasLanguage(part, &#x27;sufix&#x27;)
+				selected = part
+				break
+		languages.current = selected || languages.default.iso
+		if !p_data.paths
+			p_data[&#x27;paths&#x27;] = {}
+
+		p_data.paths[&#x27;language-data&#x27;] = languages.current[&#x27;data-path&#x27;]
+		
+		@parseConfig(p_data)
+		false
+
+	###*
+	@method parseConfig
+	@param {Object} p_data
+	@private
+	###
+	parseConfig:(p_data)=&gt;
+		
+		@trigger(NavigationLoader.PREPARSER_DATA, p_data)
+
+		paths = PathsData.getInstance(p_data.paths)
+		p_data = paths.translate(p_data)
+
+		config = new ParseConfig(p_data)
+		@trigger(NavigationLoader.CONFIG_LOADED, {data:config.data})
+		@loadContents()
+		false 
+
+	###*
+	@method loadContents
+	@private
+	###
+	loadContents:()=&gt;
+		totalContentsLoaded ?= 0
+		contents = config.contents
+		if contents.length &gt; 0
+			i = contents.length
+			while i-- &gt;0
+				content = contents[i]
+				if content.loadContent || content.loadContent == undefined
+					queue = @loader.getGroup(content.group || content.id)
+					queue.on(AssetLoader.COMPLETE_FILE, @contentLoaded)
+					queue.loadFile(content, false)
+					queue.load()
+				else
+					@contentLoaded(null)
+		else
+			@initialQueue()
+		false
+
+	###*
+	@method contentLoaded
+	@param {Event} evt
+	@private
+	###
+	contentLoaded:(evt)=&gt;
+		evt?.currentTarget?.off(AssetLoader.COMPLETE_FILE, @contentLoaded)
+
+		if evt?.item
+			if config.views[evt.item.id]
+				config.views[evt.item.id].content = paths.translate(evt.item.result)
+			else if config.required[evt.item.group][evt.item.id]
+				config.required[evt.item.group].content = paths.translate(evt.item.result)
+				delete config.required[evt.item.group][evt.item.id]
+		totalContentsLoaded++
+		if totalContentsLoaded == config.contents.length then @initialQueue()
+
+	###*
+	@method initialQueue
+	@private
+	###
+	initialQueue:()=&gt;
+		# console.log &#x27;config:&#x27;, config.data
+		# console.log &#x27;views:&#x27;, config.views
+		# console.log &#x27;required:&#x27;, config.required
+		# console.log &#x27;contents:&#x27;, config.contents
+
+		assets = []
+		loaderSteps = []
+
+		for k, v of config.views
+			data = v.content
+			if data?
+				content = new ParseContent(data)
+				assets[v.id] = content.initialAssets
+
+		for id of config.required
+			data = config.required[id].content
+			if data?
+				content = new ParseContent(data)
+				if assets[id]
+					assets[id].concat content.initialAssets
+				else
+					assets[id] = content.initialAssets
+
+			for k, v of config.required[id]
+				if v.src
+					v.internal = false
+					if v.src != config.required[id].content?.src
+						if assets[id]
+							assets[id].push v
+						else
+							assets[id] = []
+							assets[id].push v
+
+		total = ObjectUtils.count(assets)
+		firstIndexes = loaderSteps.length
+		for k, v of assets
+			switch k
+				when &#x27;preloader&#x27;, &#x27;core&#x27;, &#x27;main&#x27;
+					loaderSteps.splice(firstIndexes, 0, {id:k, data:v, ratio:(1/total)})
+					firstIndexes++
+				else
+					loaderSteps.push {id:k, data:v, ratio:(1/total)}
+		
+		@trigger(NavigationLoader.LOAD_START)
+
+		currentStep = loaderSteps[0]
+		queue = @addLoader(currentStep.id)
+		@addFiles(currentStep.data, queue)
+		queue.load()
+		false
+
+	###*
+	@method addLoader
+	@param {String} p_id
+	@return {createjs.LoadQueue}
+	@private
+	###
+	addLoader:(p_id)-&gt;
+		queue = @loader.getGroup(p_id)
+		queue.on(AssetLoader.COMPLETE_FILE, @loadFileComplete)
+		queue.on(AssetLoader.PROGRESS_ALL, @loadProgress)
+		queue.on(AssetLoader.COMPLETE_ALL, @loadComplete)
+		return queue
+
+	###*
+	@method removeLoader
+	@param {createjs.LoadQueue} p_queue
+	@return {createjs.LoadQueue}
+	@private
+	###
+	removeLoader:(p_queue)-&gt;
+		p_queue.off(AssetLoader.COMPLETE_FILE, @loadFileComplete)
+		p_queue.off(AssetLoader.PROGRESS_ALL, @loadProgress)
+		p_queue.off(AssetLoader.COMPLETE_ALL, @loadComplete)
+		p_queue.destroy()
+		return p_queue
+
+	###*
+	@method addFiles
+	@param {createjs.LoadQueue} p_queue
+	@param {Object} p_files
+	@private
+	###
+	addFiles:(p_files, p_queue)-&gt;
+		jsRE = /.*\.(js|css|svg)$/g
+		for f in p_files
+			f.loaded = false
+			if f?.src?
+				if !f.id? || f.id is undefined
+					src = removeParam(&#x27;noCache&#x27;, f.src)
+					src = removeParam(&#x27;v&#x27;, f.src)
+					f.id = src
+
+				if f.src.indexOf(&#x27;.json&#x27;) != -1
+					f.src = f.src
+				jsRE.lastIndex = 0
+				if typeof f is &#x27;string&#x27;
+					if jsRE.test(f) then f = {src: f, type: &#x27;text&#x27;}
+				else if f.src &amp;&amp; jsRE.test(f.src)
+					f[&#x27;type&#x27;] = &#x27;text&#x27;
+				p_queue.loadFile(f, false)
+		false
+	
+	###*
+	@method loadFileComplete
+	@param {Event} evt
+	@private
+	###
+	loadFileComplete:(evt)=&gt;
+		evt.item.loaded = true
+
+		result = evt.item
+		contents = config.views[currentStep.id]?.content || config.required[currentStep.id]?.content
+		
+		window.main ?= {}
+		if contents?
+		# if contents? &amp;&amp; evt.item.internal != false
+			# @TODO 
+			# Sets the result of the content file to BaseView classes
+			# Praying for a good soul see this and fix this shit... =}
+			eval(&#x27;contents[&quot;&#x27; + evt.item.___path?.join(&#x27;&quot;][&quot;&#x27;) + &#x27;&quot;] = result&#x27;)
+			if currentStep.id == &#x27;main&#x27; then window.main[&#x27;content&#x27;] = contents
+		@trigger(NavigationLoader.LOAD_FILE_COMPLETE, {id:evt.item.id, group:currentStep.id, data:evt.item, result:result})
+		false
+
+	###*
+	@method removeParam
+	@param {String} p_param
+	@param {String} p_url
+	@private
+	###
+	removeParam=(p_param, p_url)-&gt;
+		param = null
+		params = []
+		# console.log &quot;&gt;&gt;&gt;&gt; &quot;, p_url
+		if typeof(p_url) is &#x27;string&#x27;
+			results = p_url.split?(&#x27;?&#x27;)[0]
+			query = if p_url.indexOf(&#x27;?&#x27;) != -1 then p_url.split(&#x27;?&#x27;)[1] else &#x27;&#x27;
+			if query != &#x27;&#x27;
+				params = query.split(&#x27;&amp;&#x27;)
+				i = params.length - 1
+				while i &gt;= 0
+					param = params[i].split(&#x27;=&#x27;)[0]
+					if param == p_param
+						params.splice i, 1
+					i -= 1
+				if params.length &gt; 0
+					results = results + &#x27;?&#x27; + params.join(&#x27;&amp;&#x27;)
+		return results
+
+	###*
+	@method loadProgress
+	@param {Event} evt
+	@private
+	###
+	loadProgress:(evt)=&gt;
+		@trigger(NavigationLoader.LOAD_PROGRESS, {progress:((evt.loaded / evt.total) * currentStep.ratio + loaderRatio)})
+		false
+
+	###*
+	@method loadComplete
+	@param {Event} evt
+	@private
+	###
+	loadComplete:(evt)=&gt;
+		if evt then @removeLoader(evt.currentTarget)
+
+		step = loaderSteps[loaderStep]
+		if step then @assetsLoaded(step.id)
+
+		loaderRatio += step?.ratio
+		loaderStep++
+		
+		if loaderStep &gt;= loaderSteps.length
+			@trigger(NavigationLoader.LOAD_COMPLETE)
+			@_loaded = true
+		else
+			currentStep = loaderSteps[loaderStep]
+			queue = @addLoader(currentStep.id)
+			@addFiles(currentStep.data, queue)
+			if queue._loadQueue.length + queue._currentLoads.length is 0
+				@loadComplete()
+			else
+				queue.load()
+		false
+
+	###*
+	Called when the others groups is completely loaded.
+	@method assetsLoaded 
+	@param {String} p_id
+	@private
+	###
+	assetsLoaded:(p_id)=&gt;
+		return if !p_id?
+
+		@trigger(NavigationLoader.GROUP_ASSETS_LOADED, {id:p_id, data:@loader.getGroup(p_id)})
+
+		false
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

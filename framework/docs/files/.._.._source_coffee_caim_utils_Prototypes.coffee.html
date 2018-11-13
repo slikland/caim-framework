@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>../../source/coffee/caim/utils/Prototypes.coffee - Caim Framework</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="http://slikland.com/media/images/logo_docs.png" title="Caim Framework"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 3.3.2</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/_.html">_</a></li>
+                                <li><a href="../classes/AnimationTicker.html">AnimationTicker</a></li>
+                                <li><a href="../classes/API.html">API</a></li>
+                                <li><a href="../classes/App.html">App</a></li>
+                                <li><a href="../classes/ArrayUtils.html">ArrayUtils</a></li>
+                                <li><a href="../classes/AssetLoader.html">AssetLoader</a></li>
+                                <li><a href="../classes/BaseAnimation.html">BaseAnimation</a></li>
+                                <li><a href="../classes/BaseDOM.html">BaseDOM</a></li>
+                                <li><a href="../classes/BaseNavigationController.html">BaseNavigationController</a></li>
+                                <li><a href="../classes/BaseView.html">BaseView</a></li>
+                                <li><a href="../classes/Caim.html">Caim</a></li>
+                                <li><a href="../classes/ColorUtils.html">ColorUtils</a></li>
+                                <li><a href="../classes/ConditionsValidation.html">ConditionsValidation</a></li>
+                                <li><a href="../classes/CookiesManager.html">CookiesManager</a></li>
+                                <li><a href="../classes/DataStorageManager.html">DataStorageManager</a></li>
+                                <li><a href="../classes/Debug.html">Debug</a></li>
+                                <li><a href="../classes/DefaultNavigationController.html">DefaultNavigationController</a></li>
+                                <li><a href="../classes/Detections.html">Detections</a></li>
+                                <li><a href="../classes/DOMUtils.html">DOMUtils</a></li>
+                                <li><a href="../classes/EventDispatcher.html">EventDispatcher</a></li>
+                                <li><a href="../classes/FunctionUtils.html">FunctionUtils</a></li>
+                                <li><a href="../classes/GeolocationDetection.html">GeolocationDetection</a></li>
+                                <li><a href="../classes/GestureUtils.html">GestureUtils</a></li>
+                                <li><a href="../classes/GoogleAnalytics.html">GoogleAnalytics</a></li>
+                                <li><a href="../classes/GTM.html">GTM</a></li>
+                                <li><a href="../classes/IndexedDB.html">IndexedDB</a></li>
+                                <li><a href="../classes/JSONUtils.html">JSONUtils</a></li>
+                                <li><a href="../classes/KTween.html">KTween</a></li>
+                                <li><a href="../classes/MathUtils.html">MathUtils</a></li>
+                                <li><a href="../classes/MediaDOM.html">MediaDOM</a></li>
+                                <li><a href="../classes/MetaController.html">MetaController</a></li>
+                                <li><a href="../classes/MouseUtils.html">MouseUtils</a></li>
+                                <li><a href="../classes/MovieTrackingParser.html">MovieTrackingParser</a></li>
+                                <li><a href="../classes/Navigation.html">Navigation</a></li>
+                                <li><a href="../classes/NavigationContainer.html">NavigationContainer</a></li>
+                                <li><a href="../classes/NavigationLoader.html">NavigationLoader</a></li>
+                                <li><a href="../classes/NavigationRouter.html">NavigationRouter</a></li>
+                                <li><a href="../classes/NumberUtils.html">NumberUtils</a></li>
+                                <li><a href="../classes/ObjectUtils.html">ObjectUtils</a></li>
+                                <li><a href="../classes/PreloadFiles.html">PreloadFiles</a></li>
+                                <li><a href="../classes/Resizer.html">Resizer</a></li>
+                                <li><a href="../classes/ResizeUtils.html">ResizeUtils</a></li>
+                                <li><a href="../classes/ScrollNavigationController.html">ScrollNavigationController</a></li>
+                                <li><a href="../classes/ScrollUtils.html">ScrollUtils</a></li>
+                                <li><a href="../classes/ShareUtils.html">ShareUtils</a></li>
+                                <li><a href="../classes/Shortcut.html">Shortcut</a></li>
+                                <li><a href="../classes/SplitTextUtils.html">SplitTextUtils</a></li>
+                                <li><a href="../classes/SpriteSheetAnimation.html">SpriteSheetAnimation</a></li>
+                                <li><a href="../classes/SRTParser.html">SRTParser</a></li>
+                                <li><a href="../classes/StringUtils.html">StringUtils</a></li>
+                                <li><a href="../classes/SunUtils.html">SunUtils</a></li>
+                                <li><a href="../classes/Tracking.html">Tracking</a></li>
+                                <li><a href="../classes/URLUtils.html">URLUtils</a></li>
+                                <li><a href="../classes/VideoCanvas.html">VideoCanvas</a></li>
+                                <li><a href="../classes/VideoSubtitle.html">VideoSubtitle</a></li>
+                                <li><a href="../classes/ViewsData.html">ViewsData</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/caim.html">caim</a></li>
+                                <li><a href="../modules/caim.anim.html">caim.anim</a></li>
+                                <li><a href="../modules/caim.data.html">caim.data</a></li>
+                                <li><a href="../modules/caim.debug.html">caim.debug</a></li>
+                                <li><a href="../modules/caim.event.html">caim.event</a></li>
+                                <li><a href="../modules/caim.loader.html">caim.loader</a></li>
+                                <li><a href="../modules/caim.media.html">caim.media</a></li>
+                                <li><a href="../modules/caim.media.subtitles.html">caim.media.subtitles</a></li>
+                                <li><a href="../modules/caim.media.tracking.html">caim.media.tracking</a></li>
+                                <li><a href="../modules/caim.media.video.html">caim.media.video</a></li>
+                                <li><a href="../modules/caim.navigation.core.html">caim.navigation.core</a></li>
+                                <li><a href="../modules/caim.navigation.display.html">caim.navigation.display</a></li>
+                                <li><a href="../modules/caim.navigation.types.html">caim.navigation.types</a></li>
+                                <li><a href="../modules/caim.net.html">caim.net</a></li>
+                                <li><a href="../modules/caim.tracking.html">caim.tracking</a></li>
+                                <li><a href="../modules/caim.utils.html">caim.utils</a></li>
+                                <li><a href="../modules/caim.utils.keyboard.html">caim.utils.keyboard</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: ../../source/coffee/caim/utils/Prototypes.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+## This is actually not a Class. It&#x27;s a bunch of helper methods adding prototype methods to native classes.
+##--------------------------------------
+##	Getter / Setter
+##	@example
+##	class A
+##		constructor:()-&gt;
+##			@_a = 1
+##		@get a:()-&gt;
+##			return @_a
+##		@set a:(value)-&gt;
+##			return @_a = value
+##--------------------------------------
+# TODO: Fix/Add override
+#
+isIE = -&gt;
+	nav = navigator.userAgent.toLowerCase()
+	return if (nav.indexOf(&#x27;msie&#x27;) != -1) then parseInt(nav.split(&#x27;msie&#x27;)[1]) else false
+
+if isIE() == 8
+	__scopeIE8 = document.createElement(&quot;IE8_&quot; + Math.random())
+
+###*
+This method is a decorator to create constant variable to a class.
+A extending class cannot override this constant either can&#x27;t be reassigned.
+
+* Please ignore de backslash on \\\@ as the code formatter doesn&#x27;t escape atmarks.
+
+@method @const
+@example
+	class A
+		\@const PI: 3.14
+	console.log(A.PI) // 3.14
+	class B extends A
+		\@const PI: 3.14159 // Will throw error
+	console.log(B.PI) // Already thrown error before, but will be 3.14
+###
+Function::const = (p_prop) -&gt;
+	__scope = if __scopeIE8 then __scopeIE8 else @
+	for name, value of p_prop
+		o = {}
+		o.get = () -&gt;
+			return value
+		o.set = () -&gt;
+			throw new Error(&quot;Can&#x27;t set const &quot; + name)
+		o.configurable = true
+		o.enumerable = true
+		Object.defineProperty __scope, name, o
+	null
+
+###*
+EXPERIMENTAL
+This method is a decorator to protect a property of a class instance removing the property name from enumerable list.
+
+* Please ignore de backslash on \\\@ as the code formatter doesn&#x27;t escape atmarks.
+
+@method @protectProperties
+@beta 
+@example
+	class A
+		\@protectProperties [&quot;_a&quot;, &quot;_b&quot;]
+		constructor:()-&gt;
+			\@_a = 1
+	console.log(new A()) // Will not list _a either _b as enumerable
+###
+Function::protectProperties = (p_props) -&gt;
+	console.warn(&#x27;@protectProperties is an experimental feature. Use with caution.&#x27;)
+	p_props = [].concat(p_props)
+	@::[&#x27;___&#x27;] ?= {}
+	__scope = if __scopeIE8 then __scopeIE8 else @::
+	for name in p_props
+		o = {}
+		o[&#x27;get&#x27;] = ()-&gt;
+			return @___[name]
+		o[&#x27;set&#x27;] = (value)-&gt;
+			@___[name] = value
+		o.enumerable = false
+		# o.writable = false
+		Object.defineProperty __scope, name, o
+	null
+
+
+###*
+Getter decorator for a class instance.
+With this decorator you&#x27;re able to assign a getter method to a variable.
+
+Also for a special case, you can assign a scope to the getter so you can create static getter to a class.
+
+* Please ignore de backslash on \\\@ as the code formatter doesn&#x27;t escape atmarks.
+
+@method @get
+@example
+
+	// Instance getter
+	class A
+		\@get test:()-&gt;
+			return &#x27;Hello world!&#x27;
+	a = new A()
+	console.log(a.test) // Hello world!
+
+	// Static getter
+	class A
+		\@get \@, TEST:()-&gt;
+			return &#x27;Hello world!&#x27;
+	console.log(A.TEST) // Hello world!
+###
+Function::get = (scope, p_prop) -&gt;
+	enumerable = false
+	if !p_prop
+		p_prop = scope
+		__scope = if __scopeIE8 then __scopeIE8 else @::
+	else
+		enumerable = true
+		if scope is &#x27;static&#x27;
+			scope = @
+		__scope = scope
+	for name, getter of p_prop
+		Object.defineProperty __scope, name, get: getter, configurable: true, enumerable: enumerable
+	null
+
+###*
+Setter decorator for a class instance.
+With this decorator you&#x27;re able to assign a setter method to a variable.
+
+Also for a special case, you can assign a scope to the setter so you can create static setter to a class.
+
+* Please ignore de backslash on \\\@ as the code formatter doesn&#x27;t escape atmarks.
+
+@method @set
+@example
+
+	// Instance getter / stter
+	class A
+		\@get test:()-&gt;
+			return \@_test
+		\@set test:(value)-&gt;
+			\@_test = value
+	a = new A()
+	a.test = &#x27;Hello setter&#x27;
+	console.log(a.test) // Hello setter
+
+	// Static getter / setter
+	class A
+		\@get \@, TEST:()-&gt;
+			return @_TEST
+		\@set \@, TEST:(value)-&gt;
+			\@_TEST = value
+	A.TEST = &#x27;Hello setter&#x27;
+	console.log(A.TEST) // Hello setter
+###
+
+Function::set = (scope, p_prop) -&gt;
+	enumerable = false
+	if !p_prop
+		p_prop = scope
+		__scope = if __scopeIE8 then __scopeIE8 else @::
+	else
+		enumerable = true
+		if scope is &#x27;static&#x27;
+			scope = @
+		__scope = scope
+	for name, setter of p_prop
+		Object.defineProperty __scope, name, set: setter, configurable: true, enumerable: enumerable
+	null
+
+##------------------------------------------------------------------------------
+##
+##	FUNCTION PROTOTYPE
+##
+##------------------------------------------------------------------------------
+#
+# Add ECMA262-5 method binding if not supported natively
+#
+
+window.isCallable = Function.isCallable = (fn) -&gt;
+	typeof fn == &#x27;function&#x27; or Object::toString.call(fn) == &#x27;[object Function]&#x27;
+
+unless &quot;bind&quot; of Function::
+	Function::bind = (owner) -&gt;
+		that = this
+		if arguments_.length &lt;= 1
+			-&gt;
+				that.apply owner, arguments_
+		else
+			args = Array::slice.call(arguments_, 1)
+			-&gt;
+				that.apply owner, (if arguments_.length is 0 then args else args.concat(Array::slice.call(arguments_)))
+
+
+Number.MaxSafeInteger = 2 ** 53 - 1
+Number.toInteger = (value) -&gt;
+	number = Number(value)
+	if isNaN(number)
+		return 0
+	if number == 0 or !isFinite(number)
+		return number
+	(if number &gt; 0 then 1 else -1) * Math.floor(Math.abs(number))
+
+Number.toLength = (value) -&gt;
+	len = @toInteger(value)
+	Math.min Math.max(len, 0), Number.MaxSafeInteger
+
+##------------------------------------------------------------------------------
+##
+##	STRING PROTOTYPE
+##
+##------------------------------------------------------------------------------
+#
+# Add ECMA262-5 string trim if not supported natively
+#
+
+String::url = ()-&gt;
+	a = document.createElement(&#x27;a&#x27;)
+	a.href = @
+	origin = a.hostname
+	if a.protocol.length &gt; 0
+		origin = a.protocol + &#x27;//&#x27; + a.hostname
+	if a.port.length &gt; 0
+		origin = &quot;#{origin}:#{a.port}&quot;
+	{host, hostname, pathname, port, protocol, search, hash} = a
+	a = null
+	return {origin, host, hostname, pathname, port, protocol, search, hash}
+
+String::trim=(char = null)-&gt;
+	return @ltrim(char).rtrim(char)
+
+String::ltrim=(char = null)-&gt;
+	if !char
+		char = &#x27;\\s&#x27;
+	re = new RegExp(&#x27;^&#x27; + char + &#x27;*&#x27;)
+	re.global = true
+	re.multiline = true
+	return @replace(re, &#x27;&#x27;)
+String::rtrim=(char = null)-&gt;
+	if !char
+		char = &#x27;\\s&#x27;
+	re = new RegExp(char + &#x27;*$&#x27;)
+	re.global = true
+	re.multiline = true
+	return @replace(re, &#x27;&#x27;)
+
+String::padLeft = (length, char = &#x27; &#x27;) -&gt;
+	if char.length == 0
+		char = &#x27; &#x27;
+	text = @
+	while text.length &lt; length
+		text = char + text
+	return text
+
+String::padRight = (length, char = &#x27; &#x27;) -&gt;
+	if char.length == 0
+		char = &#x27; &#x27;
+	text = @
+	while text.length &lt; length
+		text += char
+	return text
+
+##------------------------------------------------------------------------------
+##
+##	ARRAY PROTOTYPE
+##
+##------------------------------------------------------------------------------
+#
+# Add ECMA262-5 Array methods if not supported natively
+#
+
+unless &quot;isArray&quot; of Array::
+	Array.isArray = (arg) -&gt;
+		Object::toString.call(arg) == &#x27;[object Array]&#x27;
+window.isArray = Array.isArray
+
+unless &quot;of&quot; of Array::
+	Array.of = ()-&gt;
+		return Array::slice.call(arguments)
+
+unless &quot;from&quot; of Array::
+	Array.from = (arrayLike) -&gt;
+		# 1. Let C be the this value.
+		C = this
+		# 2. Let items be ToObject(arrayLike).
+		items = Object(arrayLike)
+		# 3. ReturnIfAbrupt(items).
+		if arrayLike == null
+			throw new TypeError(&#x27;Array.from requires an array-like object - not null or undefined&#x27;)
+		# 4. If mapfn is undefined, then let mapping be false.
+		mapFn = if arguments.length &gt; 1 then arguments[1] else undefined
+		T = undefined
+		if typeof mapFn != &#x27;undefined&#x27;
+			# 5. else
+			# 5. a If IsCallable(mapfn) is false, throw a TypeError exception.
+			if !Function.isCallable(mapFn)
+				throw new TypeError(&#x27;Array.from: when provided, the second argument must be a function&#x27;)
+			# 5. b. If thisArg was supplied, let T be thisArg; else let T be undefined.
+			if arguments.length &gt; 2
+				T = arguments[2]
+		# 10. Let lenValue be Get(items, &quot;length&quot;).
+		# 11. Let len be ToLength(lenValue).
+		len = Number.toLength(items.length)
+		# 13. If IsConstructor(C) is true, then
+		# 13. a. Let A be the result of calling the [[Construct]] internal method
+		# of C with an argument list containing the single item len.
+		# 14. a. Else, Let A be ArrayCreate(len).
+		A = if Function.isCallable(C) then Object(new C(len)) else new Array(len)
+		# 16. Let k be 0.
+		k = 0
+		# 17. Repeat, while k &lt; len… (also steps a - h)
+		kValue = undefined
+		while k &lt; len
+			kValue = items[k]
+			if mapFn
+				A[k] = if typeof T == &#x27;undefined&#x27; then mapFn(kValue, k) else mapFn.call(T, kValue, k)
+			else
+				A[k] = kValue
+			k += 1
+		# 18. Let putStatus be Put(A, &quot;length&quot;, len, true).
+		A.length = len
+		# 20. Return A.
+		A
+
+unless &quot;indexOf&quot; of Array::
+	Array::indexOf = (find, i) -&gt; #opt
+		i = 0  if i is undefined
+		i += @length  if i &lt; 0
+		i = 0  if i &lt; 0
+		n = @length
+
+		while i &lt; n
+			return i  if i of @ and @[i] is find
+			i++
+		-1
+unless &quot;lastIndexOf&quot; of Array::
+	Array::lastIndexOf = (find, i) -&gt; #opt
+		i = @length - 1  if i is undefined
+		i += @length  if i &lt; 0
+		i = @length - 1  if i &gt; @length - 1
+		i++ # i++ because from-argument is sadly inclusive
+		while i-- &gt; 0
+			return i  if i of @ and @[i] is find
+		-1
+unless &quot;forEach&quot; of Array::
+	Array::forEach = (action, that) -&gt; #opt
+		i = 0
+		n = @length
+
+		while i &lt; n
+			action.call that, @[i], i, @  if i of @
+			i++
+unless &quot;map&quot; of Array::
+	Array::map = (mapper, that) -&gt; #opt
+		other = new Array(@length)
+		i = 0
+		n = @length
+
+		while i &lt; n
+			other[i] = mapper.call(that, @[i], i, @)  if i of @
+			i++
+		other
+unless &quot;filter&quot; of Array::
+	Array::filter = (filter, that) -&gt; #opt
+		other = []
+		v = undefined
+		i = 0
+		n = @length
+
+		while i &lt; n
+			other.push v  if i of @ and filter.call(that, v = @[i], i, @)
+			i++
+		other
+unless &quot;every&quot; of Array::
+	Array::every = (tester, that) -&gt; #opt
+		i = 0
+		n = @length
+
+		while i &lt; n
+			return false  if i of @ and not tester.call(that, @[i], i, @)
+			i++
+		true
+unless &quot;some&quot; of Array::
+	Array::some = (tester, that) -&gt; #opt
+		i = 0
+		n = @length
+
+		while i &lt; n
+			return true  if i of @ and tester.call(that, @[i], i, @)
+			i++
+		false
+
+##------------------------------------------------------------------------------
+#
+# OBJECT PROTOTYPES
+#
+
+window.isPlainObject = Object.isObject = (obj)-&gt;
+ 	return obj!=null &amp;&amp; typeof(obj) is &quot;object&quot; &amp;&amp; Object.getPrototypeOf(obj) is Object.prototype
+
+unless &quot;is&quot; of Object
+	Object.is = (x, y) -&gt;
+		# SameValue algorithm
+		if x == y
+			# Steps 1-5, 7-10
+			# Steps 6.b-6.e: +0 != -0
+			x != 0 or 1 / x == 1 / y
+		else
+			# Step 6.a: NaN == NaN
+			x != x and y != y
+
+unless &quot;assign&quot; of Object
+	# Must be writable: true, enumerable: false, configurable: true
+	Object.defineProperty Object, &#x27;assign&#x27;,
+		value: (target, varArgs) -&gt;
+			# .length of function is 2
+			&#x27;use strict&#x27;
+			if target == null
+				# TypeError if undefined or null
+				throw new TypeError(&#x27;Cannot convert undefined or null to object&#x27;)
+			to = Object(target)
+			index = 1
+			while index &lt; arguments.length
+				nextSource = arguments[index]
+				if nextSource != null
+					# Skip over if undefined or null
+					for nextKey of nextSource
+						# Avoid bugs when hasOwnProperty is shadowed
+						if Object::hasOwnProperty.call(nextSource, nextKey)
+							to[nextKey] = nextSource[nextKey]
+				index++
+			to
+		writable: true
+		configurable: true
+
+##------------------------------------------------------------------------------
+#
+# ADDED IE9+ SUPPORT
+# TODO: FIX IE8
+#
+Node::on = Node::addEventListener
+Node::off = Node::removeEventListener
+
+Element::matches ?= Element::matches || Element::webkitMatchesSelector || Element::mozMatchesSelector || Element::msMatchesSelector || Element::oMatchesSelector
+
+Element::isElement = (p_target)-&gt;
+	if typeof HTMLElement is &#x27;object&#x27;
+		return p_target instanceof HTMLElement or p_target instanceof BaseDOM
+	else
+		return typeof p_target is &#x27;object&#x27; &amp;&amp; p_target?.nodeType is 1 &amp;&amp; typeof p_target?.nodeName is &#x27;string&#x27;
+
+##------------------------------------------------------------------------------
+#
+# rAF, Date.now, window.performance
+#
+do -&gt;
+	w = window
+	for vendor in [&#x27;ms&#x27;, &#x27;moz&#x27;, &#x27;webkit&#x27;, &#x27;o&#x27;]
+		break if w.requestAnimationFrame
+		w.requestAnimationFrame = w[&quot;#{vendor}RequestAnimationFrame&quot;]
+		w.cancelAnimationFrame = (w[&quot;#{vendor}CancelAnimationFrame&quot;] or
+								  w[&quot;#{vendor}CancelRequestAnimationFrame&quot;])
+
+	if !(&#x27;performance&#x27; of window)
+		window.performance = {}
+
+	if !Date.now
+		Date.now = () =&gt; new Date().getTime()
+
+	if !(&#x27;now&#x27; of window.performance)
+		nowOffset = Date.now()
+
+		if performance.timing &amp;&amp; performance.timing.navigationStart
+			nowOffset = performance.timing.navigationStart
+
+		window.performance.now = () =&gt; Date.now() - nowOffset
+
+	# deal with the case where rAF is built in but cAF is not.
+	if w.requestAnimationFrame
+		return if w.cancelAnimationFrame
+		browserRaf = w.requestAnimationFrame
+		canceled = {}
+		w.requestAnimationFrame = (callback) -&gt;
+			id = browserRaf (time) -&gt;
+				if id of canceled then delete canceled[id]
+				else callback time
+		w.cancelAnimationFrame = (id) -&gt; canceled[id] = true
+
+	# handle legacy browsers which don’t implement rAF
+	else
+		lastTime = 0
+		w.requestAnimationFrame = (callback) -&gt;
+			currTime = Date.now()
+			timeToCall = Math.max(0, 16 - (currTime - lastTime))
+			id = window.setTimeout(()-&gt;
+				callback(currTime + timeToCall)
+			, timeToCall)
+
+			lastTime = currTime + timeToCall
+			return id
+
+		w.cancelAnimationFrame = (id) -&gt; clearTimeout id
+
+##------------------------------------------------------------------------------
+#
+# CACHES POLYFILL BECAUSE IT IS NOT ADDED TO NATIVE YET!
+#
+if Cache?
+	unless &quot;add&quot; of Cache::
+		Cache::add = (request) -&gt;
+			@addAll [ request ]
+
+	unless &quot;addAll&quot; of Cache::
+		Cache::addAll = (requests) -&gt;
+			cache = @
+
+		# Since DOMExceptions are not constructable:
+		NetworkError = (message) -&gt;
+			@name = &#x27;NetworkError&#x27;
+			@code = 19
+			@message = message
+			return
+
+		NetworkError:: = Object.create Error::
+		Promise.resolve().then(-&gt;
+			if arguments.length &lt; 1 then throw new TypeError
+			# Simulate sequence&lt;(Request or USVString)&gt; binding:
+			sequence = []
+			requests = requests.map((request) -&gt;
+				if request instanceof Request
+					request
+				else
+					String request
+					# may throw TypeError
+			)
+			Promise.all requests.map((request) -&gt;
+				if typeof request == &#x27;string&#x27;
+					request = new Request(request)
+				scheme = new URL(request.url).protocol
+				if scheme != &#x27;http:&#x27; and scheme != &#x27;https:&#x27;
+					throw new NetworkError(&#x27;Invalid scheme&#x27;)
+				fetch request.clone()
+			)
+		).then((responses) -&gt;
+			# TODO: check that requests don&#x27;t overwrite one another
+			# (don&#x27;t think this is possible to polyfill due to opaque responses)
+			Promise.all responses.map((response, i) -&gt;
+				cache.put requests[i], response
+			)
+		).then -&gt;
+			return undefined
+
+if CacheStorage?
+	unless &quot;match&quot; of CacheStorage::
+		# This is probably vulnerable to race conditions (removing caches etc)
+		CacheStorage::match = (request, opts) -&gt;
+			caches = @
+			@keys().then (cacheNames) -&gt;
+				match = undefined
+				cacheNames.reduce ((chain, cacheName) -&gt;
+				chain.then -&gt;
+					match or caches.open(cacheName).then((cache) -&gt;
+						cache.match request, opts
+						).then((response) -&gt;
+							match = response
+							match
+						)
+				), Promise.resolve()
+
+##------------------------------------------------------------------------------
+#
+# ADDED OLDER BROWSERS SUPPORT
+#
+navigator.mediaDevices ?= {}
+navigator.getUserMedia = navigator.mediaDevices.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
