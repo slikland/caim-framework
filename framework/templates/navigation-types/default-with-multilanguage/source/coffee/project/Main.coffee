@@ -1,7 +1,7 @@
-#import slikland.navigation.types.DefaultNavigationController
-#import slikland.navigation.core.NavigationContainer
-#import slikland.navigation.core.data.LanguageData
-#import slikland.utils.Resizer
+#import caim.navigation.types.DefaultNavigationController
+#import caim.navigation.core.NavigationContainer
+#import caim.navigation.core.data.LanguageData
+#import caim.utils.Resizer
 
 #############################
 # IMPORT VIEWS BELLOW 	#

@@ -1,4 +1,4 @@
-#import slikland.navigation.core.Caim
+#import caim.navigation.core.Caim
 #import project.views.TemplatePreloaderView
 
 class Preloader extends Caim

@@ -160,7 +160,7 @@ BaseNavigationController is a base class for any type of navigation controller.<
 Please do not instantiate this class. Use the extended classes.
 @class BaseNavigationController
 @extends EventDispatcher
-@submodule slikland.navigation.core
+@submodule caim.navigation.core
  */
 var BaseNavigationController;
 BaseNavigationController = (function(_super) {
@@ -357,7 +357,7 @@ BaseNavigationController = (function(_super) {
 /**
 @class DefaultNavigationController
 @extends BaseNavigationController
-@submodule slikland.navigation.types
+@submodule caim.navigation.types
  */
 var DefaultNavigationController;
 DefaultNavigationController = (function(_super) {
@@ -1523,7 +1523,7 @@ NavigationContainer = (function(_super) {
 /**
 @class DOMUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var DOMUtils;
 DOMUtils = (function() {
@@ -1671,7 +1671,7 @@ DOMUtils = (function() {
 /**
 @class Resizer
 @extends EventDispatcher
-@submodule slikland.utils
+@submodule caim.utils
  */
 var Resizer;
 Resizer = (function(_super) {
@@ -1894,7 +1894,7 @@ Resizer = (function(_super) {
 /**
 @class ColorUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var ColorUtils;
 ColorUtils = (function() {
@@ -2001,7 +2001,7 @@ ColorUtils = (function() {
 /**
 @class FunctionUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var FunctionUtils;
 FunctionUtils = (function() {
@@ -2066,7 +2066,7 @@ FunctionUtils = (function() {
 /**
 @class MediaDOM
 @extends BaseDOM
-@submodule slikland.media
+@submodule caim.media
  */
 var MediaDOM;
 MediaDOM = (function(_super) {
@@ -2412,7 +2412,7 @@ MediaDOM = (function(_super) {
 /**
 @class VideoCanvas
 @extends BaseDOM
-@submodule slikland.media.video
+@submodule caim.media.video
  */
 var VideoCanvas;
 VideoCanvas = (function(_super) {
@@ -2899,7 +2899,7 @@ VideoCanvas = (function(_super) {
 })(BaseDOM);
 /**
 @class SRTParser
-@submodule slikland.media.subtitles
+@submodule caim.media.subtitles
  */
 var SRTParser;
 SRTParser = (function() {
@@ -2995,7 +2995,7 @@ SRTParser = (function() {
 /**
 @class VideoSubtitle
 @extends BaseDOM
-@submodule slikland.media.video
+@submodule caim.media.video
  */
 var VideoSubtitle;
 VideoSubtitle = (function(_super) {
@@ -3306,7 +3306,7 @@ Main = (function(_super) {
     if (evt == null) {
       evt = null;
     }
-    console.log(this.content, "Main");
+    console.log("Valck");
     menu = new BaseDOM();
     menu.className = 'menu';
     this.appendChildAt(menu, 0);

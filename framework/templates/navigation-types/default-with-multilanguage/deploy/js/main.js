@@ -160,6 +160,7 @@ BaseNavigationController is a base class for any type of navigation controller.<
 Please do not instantiate this class. Use the extended classes.
 @class BaseNavigationController
 @extends EventDispatcher
+@submodule slikland.navigation.core
  */
 var BaseNavigationController;
 BaseNavigationController = (function(_super) {
@@ -353,6 +354,11 @@ BaseNavigationController = (function(_super) {
   };
   return BaseNavigationController;
 })(EventDispatcher);
+/**
+@class DefaultNavigationController
+@extends BaseNavigationController
+@submodule slikland.navigation.types
+ */
 var DefaultNavigationController;
 DefaultNavigationController = (function(_super) {
   __extends(DefaultNavigationController, _super);
@@ -840,10 +846,15 @@ NavigationRouter = (function(_super) {
   	@param {String} p_route
   	@param {Object} [p_data = null]
    */
-  NavigationRouter.prototype.addRoute = function(p_route, p_data) {
-    var err, i, labels, o, p, r, routeRE;
+  NavigationRouter.prototype.addRoute = function(p_route, p_data, p_options) {
+    var err, i, labels, o, p, r, routeRE, strictParams, strictTralingSlash;
     if (p_data == null) {
       p_data = null;
+    }
+    if (p_options == null) {
+      p_options = {
+        strict: false
+      };
     }
     if (typeof p_route !== 'string') {
       i = p_route.length;
@@ -863,7 +874,17 @@ NavigationRouter = (function(_super) {
     }
     try {
       r = r.replace(/(.*?)\/*$/, '$1');
-      routeRE = new RegExp('(?:' + r.replace(/\{.*?\}/g, '(.+?)') + '$)', 'g');
+      strictTralingSlash = '(\/)?';
+      strictParams = '(?:\\?.*)?';
+      if (!!p_options.strict) {
+        strictTralingSlash = '';
+        strictParams = '';
+      }
+      if (r === '') {
+        routeRE = new RegExp("^(?:\/)?" + strictParams + "$", 'g');
+      } else {
+        routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + ("" + strictTralingSlash + ")" + strictParams + "$"), 'g');
+      }
     } catch (_error) {
       err = _error;
       console.log(err.stack);
@@ -1038,8 +1059,6 @@ Navigation Class
 The instance of this class can be accessed by `app.navigation` wrapper
 @class Navigation
 @extends EventDispatcher
-@uses NavigationRouter
-@uses BaseNavigationController
 @final
  */
 var Navigation;
@@ -1109,7 +1128,9 @@ Navigation = (function(_super) {
     for (k in _ref1) {
       v = _ref1[k];
       if (v.route != null) {
-        _router.addRoute(v.route);
+        _router.addRoute(v.route, null, {
+          strict: !!v.strictRoute || false
+        });
       }
     }
     if (((_ref2 = app.config.navigation) != null ? _ref2.autoStart : void 0) || ((_ref3 = app.config.navigation) != null ? _ref3.autoStart : void 0) === void 0) {
@@ -1154,7 +1175,7 @@ Navigation = (function(_super) {
   };
   /**
   	Returns the visible views in DOM
-  	@attribute visibleViews
+  	@property visibleViews
   	@type {Array}
   	@readOnly
    */
@@ -1165,7 +1186,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the current view
-  	@attribute currentView
+  	@property currentView
   	@type {BaseView}
   	@readOnly
    */
@@ -1176,7 +1197,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the previous view
-  	@attribute previousView
+  	@property previousView
   	@type {BaseView}
   	@readOnly
    */
@@ -1187,7 +1208,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the route data
-  	@attribute routeData
+  	@property routeData
   	@type {Object}
   	@readOnly
    */
@@ -1212,7 +1233,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the instance of router controller
-  	@attribute router
+  	@property router
   	@type {NavigationRouter}
   	@readOnly
    */
@@ -1223,7 +1244,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the instance of navigation controller
-  	@attribute navigation
+  	@property navigation
   	@type {BaseNavigationController}
   	@readOnly
    */
@@ -1450,11 +1471,19 @@ NavigationContainer = (function(_super) {
   __extends(NavigationContainer, _super);
   /**
   	@class NavigationContainer
+  	@param {String} [p_CSSClassName='nav-container']
+  	@param {String} [p_element=null] HTMLElement type
   	@constructor
    */
-  function NavigationContainer() {
+  function NavigationContainer(p_CSSClassName, p_element) {
+    if (p_CSSClassName == null) {
+      p_CSSClassName = 'nav-container';
+    }
+    if (p_element == null) {
+      p_element = null;
+    }
     this.setupNavigation = __bind(this.setupNavigation, this);
-    NavigationContainer.__super__.constructor.call(this, null, 'nav-container');
+    NavigationContainer.__super__.constructor.call(this, null, p_CSSClassName, p_element);
     this._id = 'main';
   }
   /**
@@ -1491,21 +1520,198 @@ NavigationContainer = (function(_super) {
   });
   return NavigationContainer;
 })(BaseView);
+/**
+@class DOMUtils
+@static
+@submodule slikland.utils
+ */
+var DOMUtils;
+DOMUtils = (function() {
+  function DOMUtils() {}
+  /**
+  	@method addCSSClass
+  	@static
+  	@param {HTMLElement} el
+  	@param {String} className
+  	@return {HTMLElement}
+   */
+  DOMUtils.addCSSClass = function(el, className) {
+    var classNames, i, p;
+    if (!(el instanceof Element)) {
+      return;
+    }
+    if (typeof className === 'string') {
+      className = className.replace(/\s+/ig, ' ').split(' ');
+    } else if (typeof className !== 'Array') {
+      return;
+    }
+    classNames = el.className.replace(/\s+/ig, ' ').split(' ');
+    p = classNames.length;
+    i = className.length;
+    while (i-- > 0) {
+      if (classNames.indexOf(className[i]) >= 0) {
+        continue;
+      }
+      classNames[p++] = className[i];
+    }
+    el.className = classNames.join(' ');
+    return el;
+  };
+  /**
+  	@method removeCSSClass
+  	@static
+  	@param {HTMLElement} el
+  	@param {String} className
+  	@return {HTMLElement}
+   */
+  DOMUtils.removeCSSClass = function(el, className) {
+    var classNames, i, p;
+    if (!(el instanceof Element)) {
+      return;
+    }
+    if (typeof className === 'string') {
+      className = className.replace(/\s+/ig, ' ').split(' ');
+    } else if (typeof className !== 'Array') {
+      return;
+    }
+    classNames = el.className.replace(/\s+/ig, ' ').split(' ');
+    i = className.length;
+    while (i-- > 0) {
+      if ((p = classNames.indexOf(className[i])) >= 0) {
+        classNames.splice(p, 1);
+      }
+    }
+    el.className = classNames.join(' ');
+    return el;
+  };
+  /**
+  	@method hasCSSClass
+  	@static
+  	@param {HTMLElement} el
+  	@param {String} className
+  	@return {Boolean}
+   */
+  DOMUtils.hasCSSClass = function(el, className) {
+    var classNames, hasClass, i;
+    if (!(el instanceof Element)) {
+      return;
+    }
+    if (typeof className === 'string') {
+      className = className.replace(/\s+/ig, ' ').split(' ');
+    } else if (typeof className !== 'Array') {
+      return;
+    }
+    classNames = el.className.replace(/\s+/ig, ' ').split(' ');
+    i = className.length;
+    hasClass = true;
+    while (i-- > 0) {
+      hasClass &= classNames.indexOf(className[i]) >= 0;
+    }
+    return hasClass;
+  };
+  /**
+  	@method toggleCSSClass
+  	@static
+  	@param {HTMLElement} el
+  	@param {String} name
+  	@param {Boolean} [toggle=null]
+   */
+  DOMUtils.toggleCSSClass = function(el, name, toggle) {
+    var has;
+    if (toggle == null) {
+      toggle = null;
+    }
+    if (!el) {
+      return;
+    }
+    has = this.hasCSSClass(el, name);
+    if (toggle === null) {
+      toggle = !has;
+    }
+    if (toggle) {
+      return this.addCSSClass(el, name);
+    } else {
+      return this.removeCSSClass(el, name);
+    }
+  };
+  /**
+  	@method findParentQuerySelector
+  	@static
+  	@param {HTMLElement} target
+  	@param {String} selector
+  	@return {HTMLElement|Boolean}
+   */
+  DOMUtils.findParentQuerySelector = function(target, selector) {
+    var i, items;
+    if (!target.parentNode || target.parentNode === target) {
+      return false;
+    }
+    items = target.parentNode.querySelectorAll(selector);
+    i = items.length;
+    while (i-- > 0) {
+      if (items[i] === target) {
+        return target;
+      }
+    }
+    return this.findParentQuerySelector(target.parentNode, selector);
+  };
+  /**
+  	@method removeAllChildren
+  	@static
+  	@param {HTMLElement} target
+   */
+  DOMUtils.removeAllChildren = function(target) {
+    while (target.childNodes.length) {
+      target.removeChild(target.firstChild);
+    }
+    return false;
+  };
+  return DOMUtils;
+})();
+/**
+@class Resizer
+@extends EventDispatcher
+@submodule slikland.utils
+ */
 var Resizer;
 Resizer = (function(_super) {
   var _body, _bounds;
   __extends(Resizer, _super);
+  /**
+  	@event RESIZE
+  	@static
+   */
   Resizer.RESIZE = 'resize_resizer';
+  /**
+  	@event ORIENTATION_CHANGE
+  	@static
+   */
   Resizer.ORIENTATION_CHANGE = 'orientation_change_resizer';
+  /**
+  	@event BREAKPOINT_CHANGE
+  	@static
+   */
   Resizer.BREAKPOINT_CHANGE = 'breakpoint_changed_resizer';
   _bounds = null;
   _body = null;
+  /**
+  	@method getInstance
+  	@static
+  	@param {Boolean} [p_start=false]
+  	@return {Resizer}
+   */
   Resizer.getInstance = function(p_start) {
     if (p_start == null) {
       p_start = true;
     }
     return Resizer._instance != null ? Resizer._instance : Resizer._instance = new Resizer(p_start);
   };
+  /**
+  	@class Resizer
+  	@constructor
+  	@param {Boolean} [p_start=true]
+  	@extends EventDispatcher
+   */
   function Resizer(p_start) {
     if (p_start == null) {
       p_start = true;
@@ -1520,29 +1726,53 @@ Resizer = (function(_super) {
       "left": 0,
       "right": 0
     };
+    this._currentOrientation = this.orientation;
     if (p_start != null) {
       this.start();
     }
+    Resizer.__super__.constructor.apply(this, arguments);
   }
+  /**
+  	@property width
+  	@type {Number}
+  	@readOnly
+   */
   Resizer.get({
     width: function() {
       return window.innerWidth;
     }
   });
+  /**
+  	@property height
+  	@type {Number}
+  	@readOnly
+   */
   Resizer.get({
     height: function() {
       return window.innerHeight;
     }
   });
+  /**
+  	@property orientation
+  	@type {String} 'landscape' or 'portrait'
+  	@readOnly
+   */
   Resizer.get({
     orientation: function() {
-      if (window.innerWidth > window.innerHeight) {
+      var ratio;
+      ratio = screen.width / screen.height;
+      if (window.innerWidth > window.innerHeight && ratio > 1.3) {
         return 'landscape';
       } else {
         return 'portrait';
       }
     }
   });
+  /**
+  	Gets/Sets bounds
+  	@property bounds
+  	@type {Object} The object like {"top":0, "bottom":0, "left":0, "right":0}
+   */
   Resizer.get({
     bounds: function() {
       return _bounds;
@@ -1553,17 +1783,33 @@ Resizer = (function(_super) {
       return _bounds = p_value;
     }
   });
+  /**
+  	@method start
+   */
   Resizer.prototype.start = function() {
     window.addEventListener('resize', this.change);
     window.addEventListener('orientationchange', this.change);
-    return this.change();
+    this.change(null, true);
+    return false;
   };
+  /**
+  	@method stop
+   */
   Resizer.prototype.stop = function() {
     window.removeEventListener('resize', this.change);
-    return window.removeEventListener('orientationchange', this.change);
+    window.removeEventListener('orientationchange', this.change);
+    return false;
   };
-  Resizer.prototype.change = function(evt) {
-    var k, v, _data, _ref, _ref1, _results;
+  /**
+  	@method change
+  	@param {Event} evt
+  	@param {Boolean} [allKinds=false]
+   */
+  Resizer.prototype.change = function(evt, allKinds) {
+    var k, v, _data, _ref, _ref1;
+    if (allKinds == null) {
+      allKinds = false;
+    }
     if (evt != null) {
       evt.preventDefault();
     }
@@ -1579,14 +1825,15 @@ Resizer = (function(_super) {
     if ((evt != null ? evt.type : void 0) === "resize") {
       this.trigger(Resizer.RESIZE, _data);
     }
-    if ((evt != null ? evt.type : void 0) === "orientationchange") {
+    if (this._currentOrientation !== this.orientation) {
       this.trigger(Resizer.ORIENTATION_CHANGE, _data);
+      this._currentOrientation = this.orientation;
     }
     if (app.conditions != null) {
       _ref = app.conditions.list;
       for (k in _ref) {
         v = _ref[k];
-        if ((v['size'] != null) || (v['orientation'] != null)) {
+        if ((v['size'] != null) || (v['orientation'] != null) || !!allKinds) {
           if (app.conditions.test(k)) {
             if (!this.hasClass(k)) {
               this.addClass(k);
@@ -1599,10 +1846,9 @@ Resizer = (function(_super) {
         }
       }
       _ref1 = app.conditions.list;
-      _results = [];
       for (k in _ref1) {
         v = _ref1[k];
-        if ((v['size'] != null) || (v['orientation'] != null)) {
+        if ((v['size'] != null) || (v['orientation'] != null) || !!allKinds) {
           if (app.conditions.test(k)) {
             _data['breakpoint'] = {
               key: k,
@@ -1613,66 +1859,35 @@ Resizer = (function(_super) {
               this.trigger(Resizer.BREAKPOINT_CHANGE, _data);
             }
             break;
-          } else {
-            _results.push(void 0);
           }
-        } else {
-          _results.push(void 0);
         }
       }
-      return _results;
     }
+    return false;
   };
+  /**
+  	@method addClass
+  	@param {String} className
+  	@return {HTMLElement}
+   */
   Resizer.prototype.addClass = function(className) {
-    var classNames, i, p;
-    if (typeof className === 'string') {
-      className = className.replace(/\s+/ig, ' ').split(' ');
-    } else if (typeof className !== 'Array') {
-      return;
-    }
-    classNames = _body.className.replace(/\s+/ig, ' ').split(' ');
-    p = classNames.length;
-    i = className.length;
-    while (i-- > 0) {
-      if (classNames.indexOf(className[i]) >= 0) {
-        continue;
-      }
-      classNames[p++] = className[i];
-    }
-    _body.className = classNames.join(' ');
-    return false;
+    return DOMUtils.addCSSClass(_body, className);
   };
+  /**
+  	@method removeClass
+  	@param {String} className
+  	@return {HTMLElement}
+   */
   Resizer.prototype.removeClass = function(className) {
-    var classNames, i, p;
-    if (typeof className === 'string') {
-      className = className.replace(/\s+/ig, ' ').split(' ');
-    } else if (typeof className !== 'Array') {
-      return;
-    }
-    classNames = _body.className.replace(/\s+/ig, ' ').split(' ');
-    i = className.length;
-    while (i-- > 0) {
-      if ((p = classNames.indexOf(className[i])) >= 0) {
-        classNames.splice(p, 1);
-      }
-    }
-    _body.className = classNames.join(' ');
-    return false;
+    return DOMUtils.removeCSSClass(_body, className);
   };
+  /**
+  	@method hasClass
+  	@param {String} className
+  	@return {Boolean}
+   */
   Resizer.prototype.hasClass = function(className) {
-    var classNames, hasClass, i;
-    if (typeof className === 'string') {
-      className = className.replace(/\s+/ig, ' ').split(' ');
-    } else if (typeof className !== 'Array') {
-      return;
-    }
-    classNames = _body.className.replace(/\s+/ig, ' ').split(' ');
-    i = className.length;
-    hasClass = true;
-    while (i-- > 0) {
-      hasClass &= classNames.indexOf(className[i]) >= 0;
-    }
-    return hasClass;
+    return DOMUtils.hasCSSClass(_body, className);
   };
   return Resizer;
 })(EventDispatcher);

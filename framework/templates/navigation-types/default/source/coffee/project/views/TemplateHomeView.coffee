@@ -1,6 +1,6 @@
-#import slikland.media.MediaDOM
-#import slikland.media.video.VideoCanvas
-#import slikland.media.video.VideoSubtitle
+#import caim.media.MediaDOM
+#import caim.media.video.VideoCanvas
+#import caim.media.video.VideoSubtitle
 
 class TemplateHomeView extends BaseView
 	# Change the default css class

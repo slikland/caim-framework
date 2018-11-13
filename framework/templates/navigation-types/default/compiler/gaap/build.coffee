@@ -29,7 +29,7 @@ tasks:
 		depends: 'preloaderJS'
 		
 	serviceWorkerJS:
-		src: '{framework.coffee}slikland/navigation/core/cache/ServiceWorker.coffee'
+		src: '{framework.coffee}caim/navigation/core/cache/ServiceWorker.coffee'
 		output: '{project.deploy}js/sw.js'
 
 	vendors:

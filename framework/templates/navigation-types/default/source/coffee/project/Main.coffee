@@ -1,9 +1,9 @@
-#import slikland.navigation.types.DefaultNavigationController
-#import slikland.navigation.core.NavigationContainer
-#import slikland.navigation.core.data.LanguageData
-#import slikland.utils.Resizer
-#import slikland.utils.ColorUtils
-#import slikland.utils.FunctionUtils
+#import caim.navigation.types.DefaultNavigationController
+#import caim.navigation.core.NavigationContainer
+#import caim.navigation.core.data.LanguageData
+#import caim.utils.Resizer
+#import caim.utils.ColorUtils
+#import caim.utils.FunctionUtils
 
 #############################
 # IMPORT VIEWS BELLOW 	#
@@ -23,7 +23,8 @@ class Main extends NavigationContainer
 		super
 
 	create:(evt=null)=>
-		console.log @content, "Main"
+		# console.log @content, "Main"
+		console.log "Valck"
 
 		menu = new BaseDOM()
 		menu.className = 'menu'

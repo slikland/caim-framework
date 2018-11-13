@@ -1,5 +1,5 @@
-#import slikland.navigation.types.ScrollNavigationController
-#import slikland.navigation.core.NavigationContainer
+#import caim.navigation.types.ScrollNavigationController
+#import caim.navigation.core.NavigationContainer
 
 #######################
 # IMPORT VIEWS BELLOW #
