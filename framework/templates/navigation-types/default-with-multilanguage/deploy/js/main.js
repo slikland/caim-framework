@@ -873,9 +873,7 @@ NavigationRouter = (function(_super) {
       r = '.*';
     }
     try {
-      console.log('antes', r);
       r = r.replace(/(.*?)\/*$/, '$1');
-      console.log('depois', r);
       strictTralingSlash = '(\/)?';
       strictParams = '(?:\\?.*)?';
       if (!!p_options.strict) {

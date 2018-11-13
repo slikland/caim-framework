@@ -688,7 +688,7 @@ NavigationRouter = (function(_super) {
     var params, path, pathParts;
     pathParts = /^(?:#?!?\/*)([^?]*\??.*?)$/.exec(p_rawPath);
     path = pathParts[1];
-    params = this._parseParams(pathParts[1] || pathParts[2]);
+    params = this._parseParams(pathParts[1]);
     return {
       rawPath: p_rawPath,
       path: path,
@@ -705,7 +705,7 @@ NavigationRouter = (function(_super) {
     var c, o, pRE, params;
     params = {};
     if (p_path) {
-      pRE = /&?([^=&]+)=?([^=&]*)/g;
+      pRE = /([^?=&]+)=(([^&]*))?/g;
       c = 0;
       while (o = pRE.exec(p_path)) {
         params[o[1]] = o[2];
@@ -797,7 +797,6 @@ NavigationRouter = (function(_super) {
     } else {
       window.location.hash = '!' + '/' + p_path;
     }
-    console.log(this._getParams());
     return false;
   };
   /**
@@ -882,7 +881,7 @@ NavigationRouter = (function(_super) {
         strictParams = '';
       }
       if (r === '') {
-        routeRE = new RegExp("^(?:\/)?" + strictParams + "$", 'g');
+        routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + (")" + strictParams + "$"), 'g');
       } else {
         routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + ("" + strictTralingSlash + ")" + strictParams + "$"), 'g');
       }
@@ -958,6 +957,7 @@ NavigationRouter = (function(_super) {
       data = {};
       routes[routesIndex++] = route;
       foundRoute = route.route;
+      console.log('route:', route.route, 'foundRoute:', foundRoute);
       _ref = route.labels;
       for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
         label = _ref[j];

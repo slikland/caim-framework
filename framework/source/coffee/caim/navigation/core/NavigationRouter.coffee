@@ -243,9 +243,9 @@ class NavigationRouter extends EventDispatcher
 		if r == '*' then r = '.*'
 
 		try
-			console.log 'antes', r
+			# console.log 'antes', r
 			r = r.replace(/(.*?)\/*$/, '$1')
-			console.log 'depois', r
+			# console.log 'depois', r
 			strictTralingSlash = '(\/)?'
 			strictParams = '(?:\\?.*)?'
 			if !!p_options.strict

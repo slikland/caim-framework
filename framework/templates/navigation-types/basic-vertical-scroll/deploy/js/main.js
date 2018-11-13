@@ -160,6 +160,7 @@ BaseNavigationController is a base class for any type of navigation controller.<
 Please do not instantiate this class. Use the extended classes.
 @class BaseNavigationController
 @extends EventDispatcher
+@submodule caim.navigation.core
  */
 var BaseNavigationController;
 BaseNavigationController = (function(_super) {
@@ -353,6 +354,11 @@ BaseNavigationController = (function(_super) {
   };
   return BaseNavigationController;
 })(EventDispatcher);
+/**
+@class ScrollNavigationController
+@extends BaseNavigationController
+@submodule caim.navigation.types
+ */
 var ScrollNavigationController;
 ScrollNavigationController = (function(_super) {
   var viewScrollPercent;
@@ -735,7 +741,7 @@ NavigationRouter = (function(_super) {
     var params, path, pathParts;
     pathParts = /^(?:#?!?\/*)([^?]*\??.*?)$/.exec(p_rawPath);
     path = pathParts[1];
-    params = this._parseParams(pathParts[2]);
+    params = this._parseParams(pathParts[1]);
     return {
       rawPath: p_rawPath,
       path: path,
@@ -752,7 +758,7 @@ NavigationRouter = (function(_super) {
     var c, o, pRE, params;
     params = {};
     if (p_path) {
-      pRE = /&?([^=&]+)=?([^=&]*)/g;
+      pRE = /([^?=&]+)=(([^&]*))?/g;
       c = 0;
       while (o = pRE.exec(p_path)) {
         params[o[1]] = o[2];
@@ -893,10 +899,15 @@ NavigationRouter = (function(_super) {
   	@param {String} p_route
   	@param {Object} [p_data = null]
    */
-  NavigationRouter.prototype.addRoute = function(p_route, p_data) {
-    var err, i, labels, o, p, r, routeRE;
+  NavigationRouter.prototype.addRoute = function(p_route, p_data, p_options) {
+    var err, i, labels, o, p, r, routeRE, strictParams, strictTralingSlash;
     if (p_data == null) {
       p_data = null;
+    }
+    if (p_options == null) {
+      p_options = {
+        strict: false
+      };
     }
     if (typeof p_route !== 'string') {
       i = p_route.length;
@@ -916,7 +927,17 @@ NavigationRouter = (function(_super) {
     }
     try {
       r = r.replace(/(.*?)\/*$/, '$1');
-      routeRE = new RegExp('(?:' + r.replace(/\{.*?\}/g, '(.+?)') + '$)', 'g');
+      strictTralingSlash = '(\/)?';
+      strictParams = '(?:\\?.*)?';
+      if (!!p_options.strict) {
+        strictTralingSlash = '';
+        strictParams = '';
+      }
+      if (r === '') {
+        routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + (")" + strictParams + "$"), 'g');
+      } else {
+        routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + ("" + strictTralingSlash + ")" + strictParams + "$"), 'g');
+      }
     } catch (_error) {
       err = _error;
       console.log(err.stack);
@@ -989,6 +1010,7 @@ NavigationRouter = (function(_super) {
       data = {};
       routes[routesIndex++] = route;
       foundRoute = route.route;
+      console.log('route:', route.route, 'foundRoute:', foundRoute);
       _ref = route.labels;
       for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
         label = _ref[j];
@@ -1091,8 +1113,6 @@ Navigation Class
 The instance of this class can be accessed by `app.navigation` wrapper
 @class Navigation
 @extends EventDispatcher
-@uses NavigationRouter
-@uses BaseNavigationController
 @final
  */
 var Navigation;
@@ -1162,7 +1182,9 @@ Navigation = (function(_super) {
     for (k in _ref1) {
       v = _ref1[k];
       if (v.route != null) {
-        _router.addRoute(v.route);
+        _router.addRoute(v.route, null, {
+          strict: !!v.strictRoute || false
+        });
       }
     }
     if (((_ref2 = app.config.navigation) != null ? _ref2.autoStart : void 0) || ((_ref3 = app.config.navigation) != null ? _ref3.autoStart : void 0) === void 0) {
@@ -1207,7 +1229,7 @@ Navigation = (function(_super) {
   };
   /**
   	Returns the visible views in DOM
-  	@attribute visibleViews
+  	@property visibleViews
   	@type {Array}
   	@readOnly
    */
@@ -1218,7 +1240,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the current view
-  	@attribute currentView
+  	@property currentView
   	@type {BaseView}
   	@readOnly
    */
@@ -1229,7 +1251,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the previous view
-  	@attribute previousView
+  	@property previousView
   	@type {BaseView}
   	@readOnly
    */
@@ -1240,7 +1262,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the route data
-  	@attribute routeData
+  	@property routeData
   	@type {Object}
   	@readOnly
    */
@@ -1265,7 +1287,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the instance of router controller
-  	@attribute router
+  	@property router
   	@type {NavigationRouter}
   	@readOnly
    */
@@ -1276,7 +1298,7 @@ Navigation = (function(_super) {
   });
   /**
   	Returns the instance of navigation controller
-  	@attribute navigation
+  	@property navigation
   	@type {BaseNavigationController}
   	@readOnly
    */
@@ -1503,11 +1525,19 @@ NavigationContainer = (function(_super) {
   __extends(NavigationContainer, _super);
   /**
   	@class NavigationContainer
+  	@param {String} [p_CSSClassName='nav-container']
+  	@param {String} [p_element=null] HTMLElement type
   	@constructor
    */
-  function NavigationContainer() {
+  function NavigationContainer(p_CSSClassName, p_element) {
+    if (p_CSSClassName == null) {
+      p_CSSClassName = 'nav-container';
+    }
+    if (p_element == null) {
+      p_element = null;
+    }
     this.setupNavigation = __bind(this.setupNavigation, this);
-    NavigationContainer.__super__.constructor.call(this, null, 'nav-container');
+    NavigationContainer.__super__.constructor.call(this, null, p_CSSClassName, p_element);
     this._id = 'main';
   }
   /**
