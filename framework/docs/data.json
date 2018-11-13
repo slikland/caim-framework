@@ -2,7 +2,7 @@
     "project": {
         "name": "Caim Framework",
         "description": "Caim Framework",
-        "version": "3.3.2",
+        "version": "3.3.3",
         "url": "http://slikland.com/",
         "logo": "http://slikland.com/media/images/logo_docs.png",
         "source": "../../source/",
