@@ -650,7 +650,7 @@ if (navigator.mediaDevices == null) {
 navigator.getUserMedia = navigator.mediaDevices.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 /**
 @class EventDispatcher
-@submodule slikland.event
+@submodule caim.event
  */
 var EventDispatcher;
 EventDispatcher = (function() {
@@ -884,7 +884,7 @@ EventDispatcher = (function() {
 _
 @class App
 @extends EventDispatcher
-@submodule slikland.navigation.core
+@submodule caim.navigation.core
  */
 var App, app, windowLoaded;
 App = (function(_super) {
@@ -1078,7 +1078,7 @@ if (window.addEventListener) {
 /**
 @class Debug
 @static
-@submodule slikland.debug
+@submodule caim.debug
 @final
  */
 var Debug,
@@ -1110,7 +1110,7 @@ Debug = (function() {
     Debug.debug = re.test(window.location.search);
     re = new RegExp(/debug=(0|false)/i);
     if (!Debug.debug && !re.test(window.location.search)) {
-      re = new RegExp(/([\.|\/]local\.|localhost|127\.0\.0\.1|192\.\d+\.\d+\.\d+|dev\.s\d+\.slikland\.)/i);
+      re = new RegExp(/([\.|\/]local\.|localhost|127\.0\.0\.1|192\.\d+\.\d+\.\d+|dev\.s\d+\.caim\.)/i);
       Debug.debug = re.test(window.location.href);
     }
     if (!Debug.debug || !window.console) {
@@ -1318,7 +1318,7 @@ window.Debug = Debug;
 Debug.init();
 /**
 @class Detections
-@submodule slikland.utils
+@submodule caim.utils
  */
 var Detections;
 Detections = (function() {
@@ -1707,7 +1707,7 @@ Detections = (function() {
 })();
 /**
 @class PreloadFiles
-@submodule slikland.loader
+@submodule caim.loader
  */
 /*
 It's a simple wrapper to PreloadJS.
@@ -1728,7 +1728,7 @@ createjs.EventDispatcher.prototype.on = function() {
 /**
 @class NumberUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var NumberUtils;
 NumberUtils = (function() {
@@ -1850,7 +1850,7 @@ NumberUtils = (function() {
 })();
 /**
 @class ArrayUtils
-@submodule slikland.utils
+@submodule caim.utils
 @static
  */
 var ArrayUtils;
@@ -2064,7 +2064,7 @@ ArrayUtils = (function() {
 /**
 @class StringUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var StringUtils,
   __slice = [].slice;
@@ -2894,7 +2894,7 @@ PathsData = (function(_super) {
 /**
 @class AssetLoader
 @extends EventDispatcher
-@submodule slikland.loader
+@submodule caim.loader
  */
 var AssetLoader;
 AssetLoader = (function(_super) {
@@ -3081,7 +3081,7 @@ AssetLoader = (function(_super) {
 /**
 @class ObjectUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var ObjectUtils;
 ObjectUtils = (function() {
@@ -4713,7 +4713,7 @@ MetaController = (function(_super) {
 /**
 @class BaseView
 @extends BaseDOM
-@submodule slikland.navigation.display
+@submodule caim.navigation.display
  */
 var BaseView;
 BaseView = (function(_super) {
@@ -5383,7 +5383,7 @@ BaseView = (function(_super) {
 /**
 @class JSONUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var JSONUtils;
 JSONUtils = (function() {
@@ -6483,7 +6483,7 @@ NavigationLoader = (function(_super) {
 /**
 Base class to setup the navigation and start loading of dependencies.
 @class Caim
-@module slikland
+@module caim
 @extends EventDispatcher
  */
 var Caim;

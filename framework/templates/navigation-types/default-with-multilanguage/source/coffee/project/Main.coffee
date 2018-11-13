@@ -15,6 +15,7 @@ class Main extends NavigationContainer
 	re = Resizer.getInstance()
 
 	create:(evt=null)=>
+		# console.log "valck"
 		menu = new BaseDOM()
 		menu.className = 'menu'
 		@appendChildAt(menu, 0)

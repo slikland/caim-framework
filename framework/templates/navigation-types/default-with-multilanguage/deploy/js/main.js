@@ -160,7 +160,7 @@ BaseNavigationController is a base class for any type of navigation controller.<
 Please do not instantiate this class. Use the extended classes.
 @class BaseNavigationController
 @extends EventDispatcher
-@submodule slikland.navigation.core
+@submodule caim.navigation.core
  */
 var BaseNavigationController;
 BaseNavigationController = (function(_super) {
@@ -357,7 +357,7 @@ BaseNavigationController = (function(_super) {
 /**
 @class DefaultNavigationController
 @extends BaseNavigationController
-@submodule slikland.navigation.types
+@submodule caim.navigation.types
  */
 var DefaultNavigationController;
 DefaultNavigationController = (function(_super) {
@@ -688,7 +688,7 @@ NavigationRouter = (function(_super) {
     var params, path, pathParts;
     pathParts = /^(?:#?!?\/*)([^?]*\??.*?)$/.exec(p_rawPath);
     path = pathParts[1];
-    params = this._parseParams(pathParts[2]);
+    params = this._parseParams(pathParts[1]);
     return {
       rawPath: p_rawPath,
       path: path,
@@ -705,7 +705,7 @@ NavigationRouter = (function(_super) {
     var c, o, pRE, params;
     params = {};
     if (p_path) {
-      pRE = /&?([^=&]+)=?([^=&]*)/g;
+      pRE = /([^?=&]+)=(([^&]*))?/g;
       c = 0;
       while (o = pRE.exec(p_path)) {
         params[o[1]] = o[2];
@@ -873,7 +873,9 @@ NavigationRouter = (function(_super) {
       r = '.*';
     }
     try {
+      console.log('antes', r);
       r = r.replace(/(.*?)\/*$/, '$1');
+      console.log('depois', r);
       strictTralingSlash = '(\/)?';
       strictParams = '(?:\\?.*)?';
       if (!!p_options.strict) {
@@ -881,7 +883,7 @@ NavigationRouter = (function(_super) {
         strictParams = '';
       }
       if (r === '') {
-        routeRE = new RegExp("^(?:\/)?" + strictParams + "$", 'g');
+        routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + (")" + strictParams + "$"), 'g');
       } else {
         routeRE = new RegExp("(?:" + r.replace(/\{.*?\}/g, "(.+?)") + ("" + strictTralingSlash + ")" + strictParams + "$"), 'g');
       }
@@ -957,6 +959,7 @@ NavigationRouter = (function(_super) {
       data = {};
       routes[routesIndex++] = route;
       foundRoute = route.route;
+      console.log('route:', route.route, 'foundRoute:', foundRoute);
       _ref = route.labels;
       for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
         label = _ref[j];
@@ -1523,7 +1526,7 @@ NavigationContainer = (function(_super) {
 /**
 @class DOMUtils
 @static
-@submodule slikland.utils
+@submodule caim.utils
  */
 var DOMUtils;
 DOMUtils = (function() {
@@ -1671,7 +1674,7 @@ DOMUtils = (function() {
 /**
 @class Resizer
 @extends EventDispatcher
-@submodule slikland.utils
+@submodule caim.utils
  */
 var Resizer;
 Resizer = (function(_super) {

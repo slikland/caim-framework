@@ -12,12 +12,12 @@
 	},
 	"languages":[
 		{
-			"default":true,
 			"iso":"pt-br",
 			"sufix":"pt",
 			"data-path":"{data}pt-br/"
 		},
 		{
+			"default":true,
 			"iso":"en-us",
 			"sufix":"en",
 			"data-path":"{data}en-us/"

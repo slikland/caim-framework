@@ -44,6 +44,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Resizer",
         "SRTParser",
         "ScrollNavigationController",
+        "ScrollUtils",
         "ShareUtils",
         "Shortcut",
         "SplitTextUtils",
@@ -58,95 +59,95 @@ YUI.add("yuidoc-meta", function(Y) {
         "_"
     ],
     "modules": [
-        "slikland",
-        "slikland.anim",
-        "slikland.data",
-        "slikland.debug",
-        "slikland.event",
-        "slikland.loader",
-        "slikland.media",
-        "slikland.media.subtitles",
-        "slikland.media.tracking",
-        "slikland.media.video",
-        "slikland.navigation.core",
-        "slikland.navigation.display",
-        "slikland.navigation.types",
-        "slikland.net",
-        "slikland.tracking",
-        "slikland.utils",
-        "slikland.utils.keyboard"
+        "caim",
+        "caim.anim",
+        "caim.data",
+        "caim.debug",
+        "caim.event",
+        "caim.loader",
+        "caim.media",
+        "caim.media.subtitles",
+        "caim.media.tracking",
+        "caim.media.video",
+        "caim.navigation.core",
+        "caim.navigation.display",
+        "caim.navigation.types",
+        "caim.net",
+        "caim.tracking",
+        "caim.utils",
+        "caim.utils.keyboard"
     ],
     "allModules": [
         {
-            "displayName": "slikland",
-            "name": "slikland",
+            "displayName": "caim",
+            "name": "caim",
             "description": "_"
         },
         {
-            "displayName": "slikland.anim",
-            "name": "slikland.anim",
+            "displayName": "caim.anim",
+            "name": "caim.anim",
             "description": "_"
         },
         {
-            "displayName": "slikland.data",
-            "name": "slikland.data"
+            "displayName": "caim.data",
+            "name": "caim.data"
         },
         {
-            "displayName": "slikland.debug",
-            "name": "slikland.debug"
+            "displayName": "caim.debug",
+            "name": "caim.debug"
         },
         {
-            "displayName": "slikland.event",
-            "name": "slikland.event"
+            "displayName": "caim.event",
+            "name": "caim.event"
         },
         {
-            "displayName": "slikland.loader",
-            "name": "slikland.loader"
+            "displayName": "caim.loader",
+            "name": "caim.loader"
         },
         {
-            "displayName": "slikland.media",
-            "name": "slikland.media"
+            "displayName": "caim.media",
+            "name": "caim.media"
         },
         {
-            "displayName": "slikland.media.subtitles",
-            "name": "slikland.media.subtitles"
+            "displayName": "caim.media.subtitles",
+            "name": "caim.media.subtitles"
         },
         {
-            "displayName": "slikland.media.tracking",
-            "name": "slikland.media.tracking"
+            "displayName": "caim.media.tracking",
+            "name": "caim.media.tracking"
         },
         {
-            "displayName": "slikland.media.video",
-            "name": "slikland.media.video"
+            "displayName": "caim.media.video",
+            "name": "caim.media.video"
         },
         {
-            "displayName": "slikland.navigation.core",
-            "name": "slikland.navigation.core",
+            "displayName": "caim.navigation.core",
+            "name": "caim.navigation.core",
             "description": "_"
         },
         {
-            "displayName": "slikland.navigation.display",
-            "name": "slikland.navigation.display"
+            "displayName": "caim.navigation.display",
+            "name": "caim.navigation.display"
         },
         {
-            "displayName": "slikland.navigation.types",
-            "name": "slikland.navigation.types"
+            "displayName": "caim.navigation.types",
+            "name": "caim.navigation.types"
         },
         {
-            "displayName": "slikland.net",
-            "name": "slikland.net"
+            "displayName": "caim.net",
+            "name": "caim.net"
         },
         {
-            "displayName": "slikland.tracking",
-            "name": "slikland.tracking"
+            "displayName": "caim.tracking",
+            "name": "caim.tracking"
         },
         {
-            "displayName": "slikland.utils",
-            "name": "slikland.utils"
+            "displayName": "caim.utils",
+            "name": "caim.utils"
         },
         {
-            "displayName": "slikland.utils.keyboard",
-            "name": "slikland.utils.keyboard"
+            "displayName": "caim.utils.keyboard",
+            "name": "caim.utils.keyboard"
         }
     ],
     "elements": []

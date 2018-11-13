@@ -8,7 +8,7 @@ sourcePaths: []
 docs:
     name: "Caim Framework"
     description: "Caim Framework"
-    version: "3.3.1"
+    version: "3.3.2"
     url: "http://slikland.com/"
     logo: "http://slikland.com/media/images/logo_docs.png"
     source: "{paths.source}"

@@ -688,7 +688,7 @@ NavigationRouter = (function(_super) {
     var params, path, pathParts;
     pathParts = /^(?:#?!?\/*)([^?]*\??.*?)$/.exec(p_rawPath);
     path = pathParts[1];
-    params = this._parseParams(pathParts[2]);
+    params = this._parseParams(pathParts[1] || pathParts[2]);
     return {
       rawPath: p_rawPath,
       path: path,
@@ -797,6 +797,7 @@ NavigationRouter = (function(_super) {
     } else {
       window.location.hash = '!' + '/' + p_path;
     }
+    console.log(this._getParams());
     return false;
   };
   /**
