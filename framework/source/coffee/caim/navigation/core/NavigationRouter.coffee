@@ -320,7 +320,7 @@ class NavigationRouter extends EventDispatcher
 			data = {}
 			routes[routesIndex++] = route
 			foundRoute = route.route
-			console.log 'route:', route.route, 'foundRoute:', foundRoute
+			# console.log 'route:', route.route, 'foundRoute:', foundRoute
 			for label, j in route.labels
 				v = o[j + 1]
 				data[label] = v
