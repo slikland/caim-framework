@@ -957,7 +957,6 @@ NavigationRouter = (function(_super) {
       data = {};
       routes[routesIndex++] = route;
       foundRoute = route.route;
-      console.log('route:', route.route, 'foundRoute:', foundRoute);
       _ref = route.labels;
       for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
         label = _ref[j];
