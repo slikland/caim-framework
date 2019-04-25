@@ -111,7 +111,7 @@ class Caim extends EventDispatcher
 				break
 			when 'preloader'
 				@preloaderAssetsLoaded()
-				@createPreloaderView()
+				# @createPreloaderView()
 				break
 		false
 
@@ -121,8 +121,6 @@ class Caim extends EventDispatcher
 	@protected
 	###
 	createPreloaderView:()=>
-		if app.config.required.preloader?.content?
-			_preloaderView.content = app.config.required.preloader.content
 		wrapper.appendChild(_preloaderView.element)
 		_preloaderView.on(BaseView.CREATE_COMPLETE, @showPreloaderView)
 		_preloaderView.createStart()
@@ -213,6 +211,8 @@ class Caim extends EventDispatcher
 	@protected
 	###
 	preloaderAssetsLoaded:(evt=null)=>
+		if app.config.required?.preloader?.content? && _preloaderView?
+			_preloaderView.content = app.config.required.preloader.content
 		false
 
 	###*
