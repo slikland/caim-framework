@@ -1010,7 +1010,6 @@ NavigationRouter = (function(_super) {
       data = {};
       routes[routesIndex++] = route;
       foundRoute = route.route;
-      console.log('route:', route.route, 'foundRoute:', foundRoute);
       _ref = route.labels;
       for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
         label = _ref[j];
@@ -1594,7 +1593,7 @@ TemplateHomeView = (function(_super) {
     this.createComplete = __bind(this.createComplete, this);
     this.create = __bind(this.create, this);
     this.createStart = __bind(this.createStart, this);
-    TemplateHomeView.__super__.constructor.call(this, p_data, 'views');
+    TemplateHomeView.__super__.constructor.call(this, p_data, 'home');
   }
   TemplateHomeView.prototype.createStart = function(evt) {
     if (evt == null) {
@@ -1722,6 +1721,10 @@ TemplateSubView = (function(_super) {
     if (evt == null) {
       evt = null;
     }
+    this.wrapperTest = new BaseDOM('div');
+    this.appendChild(this.wrapperTest);
+    this.wrapperTest.className = 'wrapperTest';
+    this.wrapperTest.id = 'wrapperTest';
     this.background = new BaseDOM('div');
     this.appendChild(this.background);
     this.background.className = 'background';

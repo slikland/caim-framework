@@ -6623,7 +6623,6 @@ Caim = (function(_super) {
         break;
       case 'preloader':
         this.preloaderAssetsLoaded();
-        this.createPreloaderView();
         break;
     }
     return false;
@@ -6634,10 +6633,6 @@ Caim = (function(_super) {
   	@protected
    */
   Caim.prototype.createPreloaderView = function() {
-    var _ref;
-    if (((_ref = app.config.required.preloader) != null ? _ref.content : void 0) != null) {
-      _preloaderView.content = app.config.required.preloader.content;
-    }
     wrapper.appendChild(_preloaderView.element);
     _preloaderView.on(BaseView.CREATE_COMPLETE, this.showPreloaderView);
     _preloaderView.createStart();
@@ -6747,8 +6742,12 @@ Caim = (function(_super) {
   	@protected
    */
   Caim.prototype.preloaderAssetsLoaded = function(evt) {
+    var _ref, _ref1;
     if (evt == null) {
       evt = null;
+    }
+    if ((((_ref = app.config.required) != null ? (_ref1 = _ref.preloader) != null ? _ref1.content : void 0 : void 0) != null) && (_preloaderView != null)) {
+      _preloaderView.content = app.config.required.preloader.content;
     }
     return false;
   };

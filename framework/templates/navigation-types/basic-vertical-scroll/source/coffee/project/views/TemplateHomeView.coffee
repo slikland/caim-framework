@@ -1,7 +1,7 @@
 class TemplateHomeView extends BaseView
 	# Change the default css class
 	constructor: (p_data=null, p_className=null) ->
-		super p_data, 'views'
+		super p_data, 'home'
 
 	createStart:(evt=null)=>
 		@background = new BaseDOM('div')

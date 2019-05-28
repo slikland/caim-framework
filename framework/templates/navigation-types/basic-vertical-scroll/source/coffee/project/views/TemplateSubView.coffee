@@ -4,6 +4,11 @@ class TemplateSubView extends BaseView
 		super p_data, 'views'
 
 	createStart:(evt=null)=>
+		@wrapperTest = new BaseDOM('div')
+		@appendChild(@wrapperTest)
+		@wrapperTest.className = 'wrapperTest'
+		@wrapperTest.id = 'wrapperTest'
+		
 		@background = new BaseDOM('div')
 		@appendChild(@background)
 		@background.className = 'background'
